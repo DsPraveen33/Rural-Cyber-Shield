@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Cyber Safety Learning Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .video-card-hover:hover .play-overlay {
+            opacity: 1;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#cfe6f2",
+                      "outline-variant": "#c2c7d1",
+                      "surface-tint": "#2d6197",
+                      "error-container": "#ffdad6",
+                      "surface-variant": "#cfe6f2",
+                      "secondary-fixed": "#a3f69c",
+                      "surface-container": "#dbf1fe",
+                      "tertiary-fixed": "#ffdcc6",
+                      "primary-fixed": "#d2e4ff",
+                      "secondary-container": "#a0f399",
+                      "background": "#f3faff",
+                      "secondary": "#1b6d24",
+                      "inverse-surface": "#1e333c",
+                      "on-secondary-container": "#217128",
+                      "on-tertiary-container": "#ffa564",
+                      "on-error-container": "#93000a",
+                      "on-background": "#071e27",
+                      "surface-bright": "#f3faff",
+                      "primary-fixed-dim": "#a0c9ff",
+                      "error": "#ba1a1a",
+                      "primary-container": "#0f4c81",
+                      "on-surface": "#071e27",
+                      "on-primary-container": "#8ebdf9",
+                      "inverse-primary": "#a0c9ff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#f3faff",
+                      "on-primary-fixed": "#001c37",
+                      "outline": "#727780",
+                      "on-tertiary-fixed-variant": "#723600",
+                      "surface-container-low": "#e6f6ff",
+                      "on-primary": "#ffffff",
+                      "surface-dim": "#c7dde9",
+                      "secondary-fixed-dim": "#88d982",
+                      "primary": "#00355f",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#42474f",
+                      "inverse-on-surface": "#dff4ff",
+                      "on-tertiary-fixed": "#311300",
+                      "on-secondary-fixed-variant": "#005312",
+                      "on-error": "#ffffff",
+                      "surface-container-high": "#d5ecf8",
+                      "on-secondary-fixed": "#002204",
+                      "on-primary-fixed-variant": "#07497d",
+                      "tertiary": "#552700",
+                      "tertiary-container": "#773900",
+                      "tertiary-fixed-dim": "#ffb786"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "margin-desktop": "32px",
+                      "stack-lg": "32px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "label-md": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "display-lg-mobile": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+          min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full z-50 bg-primary dark:bg-primary-container shadow-md top-0 sticky">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-primary dark:text-on-primary-container cursor-pointer">menu</span>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary dark:text-on-primary-container">Cyber Shield</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="text-on-primary font-bold border-b-2 border-on-primary py-1" href="#">Home</a>
+<a class="text-on-primary/80 font-medium hover:bg-primary-fixed-variant/20 transition-colors px-2 py-1 rounded" href="#">Learning</a>
+<a class="text-on-primary/80 font-medium hover:bg-primary-fixed-variant/20 transition-colors px-2 py-1 rounded" href="#">AI Mitra</a>
+</nav>
+<div class="flex items-center gap-3">
+<button class="text-on-primary font-medium text-label-md border border-on-primary/30 px-3 py-1 rounded-full hover:bg-white/10 transition-colors">EN/TE</button>
+<span class="material-symbols-outlined text-on-primary">notifications</span>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-md">
+<!-- Page Title -->
+<div class="mb-stack-md">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-2">AI Cyber Safety Learning Hub</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Empowering you with the knowledge to stay safe in the digital world. Expert-led sessions in English and Telugu.</p>
+</div>
+<!-- Featured Video Section -->
+<section class="relative rounded-xl overflow-hidden mb-stack-lg shadow-xl group border border-outline-variant/30">
+<div class="aspect-video md:h-[500px] w-full relative">
+<img alt="Phishing Scam Awareness" class="w-full h-full object-cover" data-alt="A high-quality cinematic thumbnail for a cybersecurity educational video showing a suspicious mobile phone message on a dark background with digital shield overlays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-vSbJnV7X37o348jHerlXWTCkvVmo4Z_4tiPZMhfApRBmlzdGUHEpEwx048yEA_v8syfKm-Y7jRY8LtUE2LnSzlhc9-lz7QwayNkPZhIqaa_EZ-P5homh9nICgBkRtNJeRzDg5BMVf7bnZXNFjhEZZeW2X8kY2hR_O1xO9L4zwuejVV1HAuSdokd22J0EG182FwTciQqUZEQRH9edZ26Re5pJ81y_9H33tHHnzTUH0yAD2UdMNDv3Oa2RtNy31MYK12kvoLJNIOmV"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+<!-- Improved Featured Tag -->
+<div class="absolute top-4 left-4 flex items-center gap-2 bg-error text-white px-3 py-1.5 rounded-full shadow-lg">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest font-bold">Featured Lesson</span>
+</div>
+<!-- Overlay Content -->
+<div class="absolute bottom-0 left-0 p-margin-mobile md:p-margin-desktop w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-xl">
+<h3 class="font-headline-md text-headline-md md:text-display-lg-mobile text-white mb-2">Phishing SMS Scam Awareness</h3>
+<p class="text-white/80 font-body-md text-body-md line-clamp-2 md:line-clamp-none">Learn how to identify fraudulent SMS links and protect your personal banking information from modern phishing attempts.</p>
+</div>
+<button class="bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container px-8 py-4 rounded-full flex items-center gap-3 font-headline-sm transition-all active:scale-95 shadow-2xl self-start md:self-auto group/btn">
+<span class="material-symbols-outlined transition-transform group-hover/btn:scale-110" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        Watch Now
+                    </button>
+</div>
+</div>
+</section>
+<!-- Filter Chips -->
+<div class="flex gap-stack-sm mb-stack-md overflow-x-auto pb-2 no-scrollbar">
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md whitespace-nowrap shadow-sm">All Topics</button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high px-6 py-2.5 rounded-full font-label-md transition-colors whitespace-nowrap border border-outline-variant/30">Fraud Scams</button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high px-6 py-2.5 rounded-full font-label-md transition-colors whitespace-nowrap border border-outline-variant/30">Identity Protection</button>
+<button class="bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high px-6 py-2.5 rounded-full font-label-md transition-colors whitespace-nowrap border border-outline-variant/30">Safe Payments</button>
+</div>
+<!-- Video Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-stack-lg">
+<!-- Video Card 1 -->
+<div class="flex flex-col group video-card-hover cursor-pointer bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="relative aspect-video overflow-hidden bg-surface-container">
+<img alt="Digital Arrest" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A focused visual representing a digital security concept." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4hlIYtQzuRIDylhc9i1IF1oGLGwBoMIqdy3m4paZvfsMjSvOhS_17g550XKm3b_vWREzAExc4yUUbHJCRp2T8VthPJ3IeuT5CyBJ8ADl6xHkAErd916AhG9mh7oXSvPlSKkLZRxf6EvMbiNRC9Vy5VDRNPtXuvc9mdFw-5Vn3jHaGK5FOg3LsxZnM51AIV0Svrd_gOJHfjiMlBlpKLk1WwklHjtLV1RvZM7v3P43jkwh15H8qE_nv2c51a7BLhfJD9CUrgMNcekzH"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 play-overlay transition-opacity duration-300">
+<span class="material-symbols-outlined text-white text-5xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded">12:45</div>
+<div class="absolute bottom-0 left-0 w-full h-[3px] bg-outline-variant/20">
+<div class="h-full bg-secondary w-3/4"></div>
+</div>
+</div>
+<div class="p-3">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-stack-sm line-clamp-1 group-hover:text-primary transition-colors">Digital Arrest Scam Awareness</h4>
+<div class="flex items-center justify-between mt-1">
+<div class="flex gap-1.5">
+<span class="text-[10px] font-bold border border-primary/20 text-primary px-1.5 py-0.5 rounded uppercase">EN</span>
+<span class="text-[10px] font-bold border border-primary/20 text-primary px-1.5 py-0.5 rounded uppercase">TE</span>
+</div>
+<span class="text-[11px] font-medium text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full">75% Complete</span>
+</div>
+</div>
+</div>
+<!-- Video Card 2 -->
+<div class="flex flex-col group video-card-hover cursor-pointer bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="relative aspect-video overflow-hidden bg-surface-container">
+<img alt="OTP Fraud" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close up of a person's thumb about to tap a notification on a glowing smartphone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSd8zooZKzS5mJgceOgfwxzIRjXjgHVM44InxX0qWqsbBIP_rOlirV3LzkQ9YUXFHg7263_Y_Yr4Tu4eMylP0NIcBwq0lqyzGHqNEfj2nQRteEAsZY6FMa3FtT6GKpyQLbGK50seqLYHOrN7qfiVvM-O2erxvVGLkuj3pJFpTOfj1ii3KxgmgnxA1wqKh5VWCzV-HxllLy99gRnk3pYYOz9Ksqmy3NggAfPXqzKEOMvcGKtXbDjqx6Rbg50w08NBkBSPUQ4Ug3FbRU"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 play-overlay transition-opacity duration-300">
+<span class="material-symbols-outlined text-white text-5xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded">08:20</div>
+<div class="absolute bottom-0 left-0 w-full h-[3px] bg-outline-variant/20">
+<div class="h-full bg-secondary w-0"></div>
+</div>
+</div>
+<div class="p-3">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-stack-sm line-clamp-1 group-hover:text-primary transition-colors">OTP Sharing Fraud</h4>
+<div class="flex items-center justify-between mt-1">
+<div class="flex gap-1.5">
+<span class="text-[10px] font-bold border border-primary/20 text-primary px-1.5 py-0.5 rounded uppercase">EN</span>
+<span class="text-[10px] font-bold border border-primary/20 text-primary px-1.5 py-0.5 rounded uppercase">TE</span>
+</div>
+<span class="text-[11px] font-medium text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded-full">Not Started</span>
+</div>
+</div>
+</div>
+<!-- Video Card 3 -->
+<div class="flex flex-col group video-card-hover cursor-pointer bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="relative aspect-video overflow-hidden bg-surface-container">
+<img alt="UPI QR Safety" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A macro shot of a QR code printed on a sticker being scanned." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPcKeUhwL77oh7dYr_PiWc53jDDJBDKpE7tvDCheBHr7AkbkfdJyyfkONggxKySGaMZwPT-x1N3dYjEDJ-KMtbsxKVl1E3l1PkLgE8yeV2QUUpAN0JTBDzowcB0mID7h1P3mb0AUGZ3hJyU01a5-7VoqWacdjs1lq0XuR3YSZG0lxXsfGwSSssHwno1r4QApBdnvqWDINreRfLeCbUmhp0Mrm8uC_rRtsSsRzi_-4M3p9t-FlPStTbcNDVptceQlN1vBXNCoYebaqd"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 play-overlay transition-opacity duration-300">
+<span class="material-symbols-outlined text-white text-5xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded">15:10</div>
+<div class="absolute bottom-0 left-0 w-full h-[3px] bg-outline-variant/20">
+<div class="h-full bg-secondary w-1/4"></div>
+</div>
+</div>
+<div class="p-3">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-stack-sm line-clamp-1 group-hover:text-primary transition-colors">UPI QR Code Safety</h4>
+<div class="flex items-center justify-between mt-1">
+<div class="flex gap-1.5">
+<span class="text-[10px] font-bold border border-primary/20 text-primary px-1.5 py-0.5 rounded uppercase">EN</span>
+<span class="text-[10px] font-bold border border-primary/20 text-primary px-1.5 py-0.5 rounded uppercase">TE</span>
+</div>
+<span class="text-[11px] font-medium text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full">25% Complete</span>
+</div>
+</div>
+</div>
+<!-- Video Card 4 -->
+<div class="flex flex-col group video-card-hover cursor-pointer bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="relative aspect-video overflow-hidden bg-surface-container">
+<img alt="Aadhaar Locking" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A stylized digital representation of a fingerprint biometric sensor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUosORP12tmioqRD49E7PGSiWs347OdOB-NKcvbDfLeR0swB-AT0rmiLJnMqk8va1o1ayL0ZkQkOSfQrDYC2GJ3yWramv3xgxkpOpubw_YF5rka2QWPmLPorGeT7JxDWp-58PIdRbFkGDk2BdZnbITFBg5KIVxhnOmiCJaPMzz3-2eeYF_kgB9Z22Q_10fUaJO-ficTKlLBbA2AsVNAZs5R9nhW8WOoSM2eS97Pxuv-QvZUJOo2BcXxoce_eVZMEWVFDk_iPnzxuoE"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 play-overlay transition-opacity duration-300">
+<span class="material-symbols-outlined text-white text-5xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded">10:30</div>
+<div class="absolute bottom-0 left-0 w-full h-[3px] bg-outline-variant/20">
+<div class="h-full bg-secondary w-0"></div>
+</div>
+</div>
+<div class="p-3">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-stack-sm line-clamp-1 group-hover:text-primary transition-colors">Aadhaar Biometric Locking</h4>
+<div class="flex items-center justify-between mt-1">
+<div class="flex gap-1.5">
+<span class="text-[10px] font-bold border border-primary/20 text-primary px-1.5 py-0.5 rounded uppercase">EN</span>
+<span class="text-[10px] font-bold border border-primary/20 text-primary px-1.5 py-0.5 rounded uppercase">TE</span>
+</div>
+<span class="text-[11px] font-medium text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded-full">Not Started</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Learning Progress Card -->
+<section class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-8 mb-stack-lg flex flex-col md:flex-row items-center gap-10 shadow-sm">
+<div class="relative w-40 h-40 flex-shrink-0">
+<!-- Circular Progress matching Dashboard style -->
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-high" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-secondary" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="439.8" stroke-dashoffset="307.8" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-lg-mobile text-display-lg-mobile font-bold text-primary">30%</span>
+<span class="text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">Progress</span>
+</div>
+</div>
+<div class="flex-grow text-center md:text-left">
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Keep up the great work!</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8 max-w-lg">You've completed 3 out of 10 modules. Complete the remaining sessions to earn your National Cyber Safety Badge.</p>
+<div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+<button class="bg-primary text-on-primary hover:bg-primary-container px-10 py-3.5 rounded-xl font-label-md shadow-lg transition-all active:scale-95">Continue Learning</button>
+<button class="bg-surface-container-highest text-primary border border-primary/20 hover:bg-surface-variant px-10 py-3.5 rounded-xl font-label-md transition-all active:scale-95">View Certificate</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full sticky bottom-16 md:bottom-0 bg-error-container dark:bg-error border-t border-error/20 flex flex-col md:flex-row justify-between items-center py-4 px-margin-mobile text-center text-on-error-container dark:text-on-error z-40">
+<div class="flex items-center gap-2 font-label-md text-label-md font-bold mb-2 md:mb-0">
+<span class="material-symbols-outlined text-error">phone_in_talk</span>
+            National Cyber Fraud Helpline: 1930
+        </div>
+<div class="flex gap-6">
+<a class="opacity-90 hover:opacity-100 transition-opacity underline font-bold cursor-pointer font-label-md" href="#">Privacy Policy</a>
+<a class="opacity-90 hover:opacity-100 transition-opacity underline font-bold cursor-pointer font-label-md" href="#">Terms of Service</a>
+<a class="opacity-90 hover:opacity-100 transition-opacity underline font-bold cursor-pointer font-label-md" href="#">Government Portal</a>
+</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full h-16 flex justify-around items-center px-4 pb-safe bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-[0_-4px_20px_rgba(0,0,0,0.1)] z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-[10px]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-6 py-1.5 active:scale-95 transition-transform shadow-md" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-[10px]">Learning</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-sm text-[10px]">AI Mitra</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+<span class="font-label-sm text-[10px]">Emergency</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for the cards
+        document.querySelectorAll('.video-card-hover').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const overlay = card.querySelector('.play-overlay');
+                if (overlay) overlay.style.opacity = '1';
+            });
+            card.addEventListener('mouseleave', () => {
+                const overlay = card.querySelector('.play-overlay');
+                if (overlay) overlay.style.opacity = '0';
+            });
+        });
+    </script>
+</body></html>

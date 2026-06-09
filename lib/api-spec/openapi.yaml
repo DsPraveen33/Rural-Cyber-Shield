@@ -3,13 +3,21 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Gramin Rakshak API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: chat
+    description: Gramin Mitra AI chat
+  - name: tips
+    description: Security tips
+  - name: quiz
+    description: Cyber safety quiz
+  - name: threats
+    description: Threat information
 paths:
   /healthz:
     get:
@@ -24,6 +32,123 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /chat:
+    post:
+      operationId: sendChatMessage
+      tags: [chat]
+      summary: Send message to Gramin Mitra AI
+      description: Sends a user message and returns an AI response about cyber safety
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatMessageInput"
+      responses:
+        "200":
+          description: AI response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+
+  /tips:
+    get:
+      operationId: getTips
+      tags: [tips]
+      summary: Get security tips
+      description: Returns a list of cyber safety tips
+      responses:
+        "200":
+          description: List of tips
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SecurityTip"
+
+  /tips/daily:
+    get:
+      operationId: getDailyTip
+      tags: [tips]
+      summary: Get tip of the day
+      description: Returns today's featured cyber safety tip
+      responses:
+        "200":
+          description: Daily tip
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SecurityTip"
+
+  /threats:
+    get:
+      operationId: getThreats
+      tags: [threats]
+      summary: Get common threats
+      description: Returns a list of common cyber threats targeting rural users
+      responses:
+        "200":
+          description: List of threats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Threat"
+
+  /quiz/questions:
+    get:
+      operationId: getQuizQuestions
+      tags: [quiz]
+      summary: Get quiz questions
+      description: Returns cyber safety quiz questions
+      responses:
+        "200":
+          description: Quiz questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuizQuestion"
+
+  /quiz/submit:
+    post:
+      operationId: submitQuiz
+      tags: [quiz]
+      summary: Submit quiz answers
+      description: Submits quiz answers and returns score with feedback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuizSubmission"
+      responses:
+        "200":
+          description: Quiz result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizResult"
+
+  /stats:
+    get:
+      operationId: getCommunityStats
+      tags: [health]
+      summary: Get community safety statistics
+      description: Returns community-wide safety metrics and scores
+      responses:
+        "200":
+          description: Community stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommunityStats"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +159,156 @@ components:
       required:
         - status
 
+    ChatMessageInput:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: User's message to the AI assistant
+        language:
+          type: string
+          enum: [en, te]
+          description: Preferred response language (en=English, te=Telugu)
+
+    ChatResponse:
+      type: object
+      required:
+        - reply
+      properties:
+        reply:
+          type: string
+          description: AI assistant's response
+        suggestedActions:
+          type: array
+          items:
+            type: string
+          description: Suggested follow-up actions or links
+
+    SecurityTip:
+      type: object
+      required:
+        - id
+        - title
+        - body
+        - category
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        body:
+          type: string
+        category:
+          type: string
+          enum: [phishing, upi, aadhaar, password, whatsapp, general]
+        icon:
+          type: string
+
+    Threat:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - severity
+        - icon
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        severity:
+          type: string
+          enum: [critical, high, moderate, monitor]
+        icon:
+          type: string
+        learnMoreUrl:
+          type: ["string", "null"]
+
+    QuizQuestion:
+      type: object
+      required:
+        - id
+        - question
+        - options
+        - correctIndex
+      properties:
+        id:
+          type: integer
+        question:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        correctIndex:
+          type: integer
+        explanation:
+          type: string
+
+    QuizSubmission:
+      type: object
+      required:
+        - answers
+      properties:
+        answers:
+          type: array
+          items:
+            type: object
+            required:
+              - questionId
+              - selectedIndex
+            properties:
+              questionId:
+                type: integer
+              selectedIndex:
+                type: integer
+
+    QuizResult:
+      type: object
+      required:
+        - score
+        - total
+        - percentage
+        - feedback
+      properties:
+        score:
+          type: integer
+        total:
+          type: integer
+        percentage:
+          type: integer
+        feedback:
+          type: string
+        badge:
+          type: ["string", "null"]
+          description: Badge earned (e.g. Cyber Safe Champion)
+
+    CommunityStats:
+      type: object
+      required:
+        - safetyScore
+        - internetUsersPercent
+        - scamVictimsPercent
+        - readinessPercent
+        - awarenessCount
+      properties:
+        safetyScore:
+          type: integer
+          description: Community safety score out of 100
+        internetUsersPercent:
+          type: integer
+        scamVictimsPercent:
+          type: integer
+        readinessPercent:
+          type: integer
+        awarenessCount:
+          type: string
+          description: e.g. "5k+"
+        trend:
+          type: string
+          description: Trend description

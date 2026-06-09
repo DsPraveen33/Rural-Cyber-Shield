@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cyber Mitra AI Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#dbf1fe",
+                        "surface-container-high": "#d5ecf8",
+                        "tertiary": "#552700",
+                        "tertiary-container": "#773900",
+                        "on-tertiary-container": "#ffa564",
+                        "on-tertiary-fixed": "#311300",
+                        "surface-dim": "#c7dde9",
+                        "on-background": "#071e27",
+                        "surface-container-highest": "#cfe6f2",
+                        "surface": "#f3faff",
+                        "background": "#f3faff",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "inverse-on-surface": "#dff4ff",
+                        "inverse-surface": "#1e333c",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#217128",
+                        "on-surface-variant": "#42474f",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#002204",
+                        "secondary-fixed-dim": "#88d982",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#e6f6ff",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c2c7d1",
+                        "on-primary-fixed": "#001c37",
+                        "secondary-container": "#a0f399",
+                        "secondary": "#1b6d24",
+                        "on-primary-container": "#8ebdf9",
+                        "on-error": "#ffffff",
+                        "outline": "#727780",
+                        "surface-variant": "#cfe6f2",
+                        "on-secondary-fixed-variant": "#005312",
+                        "error": "#ba1a1a",
+                        "on-surface": "#071e27",
+                        "primary-fixed-dim": "#a0c9ff",
+                        "primary-container": "#0f4c81",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#00355f",
+                        "inverse-primary": "#a0c9ff",
+                        "surface-bright": "#f3faff",
+                        "surface-tint": "#2d6197",
+                        "secondary-fixed": "#a3f69c",
+                        "primary-fixed": "#d2e4ff",
+                        "on-primary-fixed-variant": "#07497d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "stack-sm": "8px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "stack-md": "16px",
+                        "container-max": "1280px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chat-bubble-ai {
+            border-bottom-left-radius: 8px;
+        }
+        .chat-bubble-user {
+            border-bottom-right-radius: 8px;
+        }
+        .pulse-animation {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 53, 95, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 12px rgba(0, 53, 95, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 53, 95, 0); }
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full z-50 bg-primary dark:bg-primary-container shadow-md sticky top-0">
+<div class="flex items-center gap-4">
+<button class="text-on-primary dark:text-on-primary-container active:opacity-80 transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md-mobile md:text-headline-md font-bold text-on-primary dark:text-on-primary-container">Cyber Shield</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary-container/20 px-3 py-1 rounded-full text-on-primary text-label-md font-bold border border-on-primary/30 active:scale-95 transition-transform">
+                EN/TE
+            </button>
+<div class="hidden md:flex gap-6">
+<span class="text-on-primary/80 font-medium cursor-pointer hover:text-on-primary">Home</span>
+<span class="text-on-primary font-bold border-b-2 border-on-primary cursor-pointer">AI Mitra</span>
+</div>
+<button class="text-on-primary dark:text-on-primary-container active:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Chat Canvas -->
+<main class="flex-grow flex flex-col max-w-container-max mx-auto w-full px-margin-mobile md:px-margin-desktop pb-32 md:pb-8 pt-6">
+<!-- Hero Status & Branding -->
+<div class="mb-8 text-center md:text-left">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-2">Cyber Mitra AI</h2>
+<p class="text-secondary font-headline-sm italic">Ask Before You Click, Share, or Pay</p>
+</div>
+<!-- Chat History Container -->
+<div class="flex-grow flex flex-col gap-6 overflow-y-auto mb-6 pr-2">
+<!-- AI Welcome Message -->
+<div class="flex gap-4 items-start max-w-[90%] md:max-w-[75%]">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0 shadow-sm border border-outline-variant">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="bg-surface-container-low p-5 rounded-2xl chat-bubble-ai shadow-sm border border-outline-variant">
+<p class="font-body-md text-on-background leading-relaxed">Namaste! I am your Cyber Mitra. I can help you identify scams, lock your Aadhaar, or report fraud. How can I protect you today?</p>
+</div>
+</div>
+<!-- User Message: Scam Inquiry -->
+<div class="flex gap-4 items-start justify-end ml-auto max-w-[90%] md:max-w-[75%]">
+<div class="bg-primary-container text-on-primary-container p-5 rounded-2xl chat-bubble-user shadow-md border border-primary/20">
+<p class="font-body-md leading-relaxed">Is this SMS a scam? "Your bank account will be blocked. Update KYC at http://bit.ly/bank-secure-x1"</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-fixed-dim flex items-center justify-center shrink-0 border border-outline-variant">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+</div>
+<!-- AI Reply: Analysis -->
+<div class="flex gap-4 items-start max-w-[90%] md:max-w-[75%]">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0 shadow-sm border border-outline-variant">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="bg-surface-container-low p-5 rounded-2xl chat-bubble-ai shadow-sm border border-outline-variant">
+<div class="bg-error-container/40 border-2 border-error rounded-xl p-4 mb-4">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-error animate-pulse font-bold" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-headline-sm text-error font-extrabold uppercase tracking-tight">Warning Detected</span>
+</div>
+<p class="font-body-md text-on-background">This link uses a URL shortener and leads to a non-official website. Official banks never ask for KYC updates via bit.ly links.</p>
+<button class="mt-4 w-full bg-error text-on-error px-6 py-3 rounded-xl text-label-md font-bold active:scale-95 transition-transform flex items-center justify-center gap-2 shadow-lg">
+<span class="material-symbols-outlined text-[20px]">report</span> Report Phishing Now
+                        </button>
+</div>
+<p class="font-body-md text-on-background leading-relaxed"><strong>Do not click this.</strong> I recommend blocking the sender immediately. Would you like me to help you report this message to the authorities?</p>
+</div>
+</div>
+</div>
+<!-- Quick Action Cards (2x2 Grid) -->
+<div class="mb-8">
+<p class="font-label-sm text-outline mb-4 ml-1 uppercase tracking-widest">Safety Tools</p>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-surface-container-highest hover:bg-white text-on-surface border border-outline-variant p-4 rounded-2xl transition-all flex flex-col items-center gap-3 active:scale-95 shadow-sm">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">link</span>
+</div>
+<span class="font-label-md font-bold text-center">Check Link</span>
+</button>
+<button class="bg-surface-container-highest hover:bg-white text-on-surface border border-outline-variant p-4 rounded-2xl transition-all flex flex-col items-center gap-3 active:scale-95 shadow-sm">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">lock_person</span>
+</div>
+<span class="font-label-md font-bold text-center">Lock Aadhaar</span>
+</button>
+<button class="bg-surface-container-highest hover:bg-white text-on-surface border border-outline-variant p-4 rounded-2xl transition-all flex flex-col items-center gap-3 active:scale-95 shadow-sm">
+<div class="w-10 h-10 rounded-full bg-error-container/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-error">gavel</span>
+</div>
+<span class="font-label-md font-bold text-center">Report Fraud</span>
+</button>
+<button class="bg-surface-container-highest hover:bg-white text-on-surface border border-outline-variant p-4 rounded-2xl transition-all flex flex-col items-center gap-3 active:scale-95 shadow-sm">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">quiz</span>
+</div>
+<span class="font-label-md font-bold text-center">Safety Quiz</span>
+</button>
+</div>
+</div>
+<!-- Bottom Input Area -->
+<div class="bg-surface-container-lowest p-3 rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-outline-variant/50 flex items-center gap-2">
+<button class="text-outline hover:text-primary transition-colors p-3">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<div class="flex-grow bg-surface-container-low/50 rounded-2xl border border-outline-variant/30 focus-within:border-primary/50 transition-colors">
+<input class="w-full bg-transparent border-none focus:ring-0 text-body-md placeholder:text-outline/60 px-4 py-3" placeholder="Type your concern here..." type="text"/>
+</div>
+<div class="flex items-center gap-2 pr-1">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full flex items-center justify-center pulse-animation shadow-lg hover:shadow-primary/40 transition-all active:scale-90" id="micBtn">
+<span class="material-symbols-outlined text-[32px]">mic</span>
+</button>
+<button class="w-14 h-14 bg-secondary text-on-secondary rounded-full flex items-center justify-center hover:shadow-secondary/40 transition-all active:scale-90 shadow-md">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer Security Banner -->
+<footer class="flex flex-col md:flex-row justify-between items-center py-stack-sm px-margin-mobile w-full text-center bg-error-container dark:bg-error border-t border-error z-50 sticky bottom-16 md:bottom-0">
+<div class="flex items-center gap-2 text-on-error-container dark:text-on-error font-label-md">
+<span class="material-symbols-outlined">call</span>
+<span class="font-bold">National Cyber Fraud Helpline: 1930</span>
+</div>
+<div class="flex gap-4 mt-2 md:mt-0">
+<a class="font-label-md opacity-90 hover:opacity-100 transition-opacity underline font-bold" href="#">Privacy Policy</a>
+<a class="font-label-md opacity-90 hover:opacity-100 transition-opacity underline font-bold" href="#">Terms</a>
+<a class="font-label-md opacity-90 hover:opacity-100 transition-opacity underline font-bold" href="#">Gov Portal</a>
+</div>
+</footer>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 w-full h-16 flex justify-around items-center px-4 pb-safe bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-[0_-2px_15px_rgba(0,0,0,0.08)] z-50 rounded-t-2xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-highest transition-all active:scale-95 p-2 rounded-xl">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-highest transition-all active:scale-95 p-2 rounded-xl">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm-mobile">Learn</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-2xl px-6 py-2 active:scale-95 transition-transform shadow-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-sm text-label-sm-mobile font-bold">Mitra</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-highest transition-all active:scale-95 p-2 rounded-xl">
+<span class="material-symbols-outlined">report_problem</span>
+<span class="font-label-sm text-label-sm-mobile">SOS</span>
+</div>
+</nav>
+<script>
+        // Simple Interaction Logic
+        const micBtn = document.getElementById('micBtn');
+        let isListening = false;
+
+        micBtn.addEventListener('click', () => {
+            isListening = !isListening;
+            if (isListening) {
+                micBtn.classList.add('bg-error');
+                micBtn.classList.remove('bg-primary');
+                micBtn.querySelector('span').innerText = 'graphic_eq';
+            } else {
+                micBtn.classList.remove('bg-error');
+                micBtn.classList.add('bg-primary');
+                micBtn.querySelector('span').innerText = 'mic';
+            }
+        });
+
+        window.onload = () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease-in-out';
+                document.body.style.opacity = '1';
+            }, 50);
+        }
+    </script>
+</body></html>

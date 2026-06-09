@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Safety Quiz - Cyber Shield</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#1b6d24",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#42474f",
+                        "surface-container-low": "#e6f6ff",
+                        "surface": "#f3faff",
+                        "inverse-primary": "#a0c9ff",
+                        "surface-bright": "#f3faff",
+                        "tertiary-container": "#773900",
+                        "surface-container": "#dbf1fe",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#311300",
+                        "on-primary-fixed-variant": "#07497d",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#d2e4ff",
+                        "secondary-container": "#a0f399",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#d5ecf8",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "surface-tint": "#2d6197",
+                        "on-background": "#071e27",
+                        "secondary-fixed": "#a3f69c",
+                        "surface-variant": "#cfe6f2",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#cfe6f2",
+                        "outline": "#727780",
+                        "background": "#f3faff",
+                        "primary-fixed-dim": "#a0c9ff",
+                        "inverse-surface": "#1e333c",
+                        "primary": "#00355f",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#0f4c81",
+                        "on-primary-container": "#8ebdf9",
+                        "outline-variant": "#c2c7d1",
+                        "secondary-fixed-dim": "#88d982",
+                        "on-secondary-fixed": "#002204",
+                        "on-primary-fixed": "#001c37",
+                        "inverse-on-surface": "#dff4ff",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-surface": "#071e27",
+                        "on-secondary-fixed-variant": "#005312",
+                        "on-secondary-container": "#217128",
+                        "tertiary": "#552700",
+                        "on-tertiary-container": "#ffa564",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#c7dde9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "32px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "gutter": "24px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-state { font-variation-settings: 'FILL' 1; }
+        .quiz-card { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .quiz-card:active { transform: scale(0.98); }
+        body { background-color: #f3faff; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col font-body-md text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-headline-md text-headline-md full-width top-0 sticky shadow-md flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full z-50">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined hover:bg-primary-fixed-variant/20 transition-colors p-2 rounded-full active:opacity-80" data-icon="menu">menu</button>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary dark:text-on-primary-container">Cyber Shield</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-md text-label-md px-3 py-1 border border-on-primary/30 rounded-full active:opacity-80">EN/TE</button>
+<span class="material-symbols-outlined active:opacity-80" data-icon="notifications">notifications</span>
+</div>
+</header>
+<main class="flex-grow flex flex-col items-center w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg pb-32">
+<!-- Progress Header -->
+<div class="w-full mb-stack-lg space-y-stack-sm">
+<div class="flex justify-between items-end mb-2">
+<div>
+<p class="font-label-sm text-label-sm-mobile text-primary uppercase tracking-wider">Security Quiz</p>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Question 1 of 5</h2>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="shield" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<span class="font-label-sm text-label-sm mt-1 text-secondary font-bold">Shield Active</span>
+</div>
+</div>
+<div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[20%] transition-all duration-500 ease-out shadow-[0_0_8px_rgba(27,109,36,0.3)]"></div>
+</div>
+</div>
+<!-- Main Quiz Content (Bento Style Layout for visual interest) -->
+<div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Question Card -->
+<div class="lg:col-span-7 bg-surface-container-lowest p-stack-lg rounded-xl border border-outline-variant shadow-[0_2px_8px_rgba(0,0,0,0.04)] quiz-card">
+<div class="flex items-start gap-4 mb-stack-md">
+<div class="p-3 bg-primary-fixed rounded-lg text-primary">
+<span class="material-symbols-outlined" data-icon="security_update_warning">security_update_warning</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed font-semibold">
+                        You receive an SMS from your bank asking for an OTP to update your KYC. What should you do?
+                    </p>
+</div>
+<div class="relative w-full aspect-video rounded-lg overflow-hidden mb-stack-md bg-surface-variant">
+<img alt="Cyber Security Quiz" class="w-full h-full object-cover" data-alt="A professional close-up of a modern smartphone displaying a generic security alert notification on its screen. The background is a clean, corporate office with soft blue and green ambient lighting that evokes a sense of institutional trust and digital safety. The aesthetic is minimalist and high-tech, focusing on the clarity of the mobile interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAchw58R1xDackRK1JY8uok5KhKVmes1yItM0N-ZyoXUlAafDXNoaVr7idKp5f_6AtYnAB4Dz8VJjz5lDziHRLlG-ueF0cNxJI1_Hyrg3tMNpg_eTviC3i4-Gc7i6hCtzCxGJDHS83pycXkE_DPb52b-EklFqFYQ8XL5tBSfhoeHT56Mvh54t61uBMQVbsyaoVErI1szxs-XaZo0tyAfqrIjFe1gKYtzhALz5oCNSK0wnRX0WwGGycsnJhl_0BrmPqt56RYMOCVb7wQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div class="hidden animate-in fade-in slide-in-from-bottom-4 duration-300" id="feedback-area">
+<div class="p-stack-md rounded-lg flex items-start gap-3 bg-error-container text-on-error-container border border-error/20">
+<span class="material-symbols-outlined" data-icon="error">error</span>
+<div>
+<p class="font-label-md text-label-md font-bold mb-1">Stay Alert!</p>
+<p class="font-body-md text-body-md">Banks never ask for OTPs or sensitive links via SMS. This is a common 'Phishing' technique used by scammers to access your account.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Options Grid -->
+<div class="lg:col-span-5 flex flex-col gap-4">
+<button class="group w-full p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl text-left hover:border-primary hover:bg-surface-container transition-all active:scale-[0.98] flex items-center gap-4 min-h-[72px]" onclick="handleSelection(this, false)">
+<div class="w-10 h-10 rounded-full bg-surface-container-high group-hover:bg-primary-container group-hover:text-on-primary-container flex items-center justify-center transition-colors">
+<span class="font-bold">A</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Share the OTP</span>
+</button>
+<button class="group w-full p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl text-left hover:border-primary hover:bg-surface-container transition-all active:scale-[0.98] flex items-center gap-4 min-h-[72px]" onclick="handleSelection(this, false)">
+<div class="w-10 h-10 rounded-full bg-surface-container-high group-hover:bg-primary-container group-hover:text-on-primary-container flex items-center justify-center transition-colors">
+<span class="font-bold">B</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Click the link in SMS</span>
+</button>
+<button class="group w-full p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl text-left hover:border-secondary hover:bg-secondary-container/20 transition-all active:scale-[0.98] flex items-center gap-4 min-h-[72px]" onclick="handleSelection(this, true)">
+<div class="w-10 h-10 rounded-full bg-surface-container-high group-hover:bg-secondary group-hover:text-white flex items-center justify-center transition-colors">
+<span class="font-bold">C</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-secondary font-semibold transition-colors">Ignore and report to 1930</span>
+</button>
+<button class="group w-full p-stack-md bg-surface-container-lowest border border-outline-variant rounded-xl text-left hover:border-primary hover:bg-surface-container transition-all active:scale-[0.98] flex items-center gap-4 min-h-[72px]" onclick="handleSelection(this, false)">
+<div class="w-10 h-10 rounded-full bg-surface-container-high group-hover:bg-primary-container group-hover:text-on-primary-container flex items-center justify-center transition-colors">
+<span class="font-bold">D</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Call the number in the SMS</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="bg-error-container dark:bg-error text-on-error-container dark:text-on-error font-label-md text-label-md w-full sticky bottom-16 md:bottom-0 border-t border-error flex flex-col md:flex-row justify-between items-center py-stack-sm px-margin-mobile w-full text-center z-40">
+<div class="flex items-center gap-2 mb-2 md:mb-0">
+<span class="material-symbols-outlined text-error" data-icon="emergency">emergency</span>
+<p class="font-label-md text-label-md font-bold">National Cyber Fraud Helpline: 1930</p>
+</div>
+<div class="flex gap-4">
+<a class="opacity-90 hover:opacity-100 underline font-bold cursor-pointer transition-opacity" href="#">Privacy Policy</a>
+<a class="opacity-90 hover:opacity-100 underline font-bold cursor-pointer transition-opacity" href="#">Terms of Service</a>
+<a class="opacity-90 hover:opacity-100 underline font-bold cursor-pointer transition-opacity" href="#">Government Portal</a>
+</div>
+</footer>
+<!-- BottomNavBar (Shared Component) -->
+<nav class="fixed bottom-0 w-full h-16 flex justify-around items-center px-4 pb-safe bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-[0_-2px_10px_rgba(0,0,0,0.05)] z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-highest transition-all active:scale-95 px-2" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 hover:bg-surface-container-highest transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined active-state" data-icon="school">school</span>
+<span class="font-label-sm text-label-sm-mobile font-bold">Learning</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-highest transition-all active:scale-95 px-2" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-sm text-label-sm-mobile">AI Mitra</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-highest transition-all active:scale-95 px-2" href="#">
+<span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+<span class="font-label-sm text-label-sm-mobile">Emergency</span>
+</a>
+</nav>
+<script>
+        function handleSelection(btn, isCorrect) {
+            // Reset all buttons
+            document.querySelectorAll('button[onclick^="handleSelection"]').forEach(el => {
+                el.classList.remove('ring-2', 'ring-secondary', 'ring-error', 'bg-secondary-container/20', 'bg-error-container');
+                el.classList.add('bg-surface-container-lowest');
+                el.disabled = true;
+            });
+
+            const feedback = document.getElementById('feedback-area');
+            const feedbackText = feedback.querySelector('p:last-child');
+            const feedbackTitle = feedback.querySelector('p:first-child');
+            const feedbackIcon = feedback.querySelector('span');
+            const feedbackContainer = feedback.querySelector('div');
+
+            feedback.classList.remove('hidden');
+
+            if (isCorrect) {
+                btn.classList.add('ring-2', 'ring-secondary', 'bg-secondary-container/20');
+                feedbackContainer.classList.remove('bg-error-container', 'text-on-error-container', 'border-error/20');
+                feedbackContainer.classList.add('bg-secondary-container', 'text-on-secondary-container', 'border-secondary/20');
+                feedbackTitle.innerText = "Excellent Choice!";
+                feedbackText.innerText = "Reporting cyber threats to 1930 is the most effective way to block fraudulent accounts and recover lost funds. Stay vigilant!";
+                feedbackIcon.innerText = "check_circle";
+                
+                // Add a small celebration effect
+                confettiEffect();
+            } else {
+                btn.classList.add('ring-2', 'ring-error', 'bg-error-container');
+                feedbackContainer.classList.add('bg-error-container', 'text-on-error-container', 'border-error/20');
+                feedbackTitle.innerText = "Careful!";
+                feedbackText.innerText = "Banks will never send links asking for sensitive OTPs via SMS. Always contact your branch directly through official numbers or use the 1930 helpline for reporting scams.";
+                feedbackIcon.innerText = "warning";
+            }
+        }
+
+        function confettiEffect() {
+            // Simple placeholder for a visual reward
+            const main = document.querySelector('main');
+            for(let i=0; i<15; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'fixed w-2 h-2 bg-secondary rounded-full animate-ping pointer-events-none z-[100]';
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.top = Math.random() * 100 + 'vh';
+                document.body.appendChild(petal);
+                setTimeout(() => petal.remove(), 1000);
+            }
+        }
+    </script>
+</body></html>
