@@ -11,6 +11,7 @@ import Learning from "./pages/learning";
 import Mitra from "./pages/mitra";
 import Emergency from "./pages/emergency";
 import Quiz from "./pages/quiz";
+import Report from "./pages/report";
 
 const queryClient = new QueryClient();
 
@@ -72,10 +73,10 @@ function Layout({ children }: { children: React.ReactNode }) {
           <span className="text-[10px] font-bold">{tr.navEmergency}</span>
         </Link>
 
-        <button className="flex flex-col items-center justify-center w-full h-full text-muted-foreground hover:text-primary transition-colors">
-          <Gavel className="w-6 h-6 mb-1" />
+        <Link href="/report" className={`flex flex-col items-center justify-center w-full h-full transition-colors ${isActive('/report') ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}>
+          <Gavel className={`w-6 h-6 mb-1 ${isActive('/report') ? 'fill-primary/20' : ''}`} />
           <span className="text-[10px] font-bold">{tr.navReport}</span>
-        </button>
+        </Link>
 
       </nav>
     </div>
@@ -91,6 +92,7 @@ function Router() {
         <Route path="/mitra" component={Mitra} />
         <Route path="/emergency" component={Emergency} />
         <Route path="/quiz" component={Quiz} />
+        <Route path="/report" component={Report} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
