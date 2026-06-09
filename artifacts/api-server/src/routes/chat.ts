@@ -6,6 +6,7 @@ const router = Router();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
+  baseURL: "https://openrouter.ai/api/v1",
 });
 
 router.post("/chat", async (req, res) => {
@@ -23,7 +24,7 @@ router.post("/chat", async (req, res) => {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "openai/gpt-4o-mini",
       max_tokens: 512,
       messages: [
         {
