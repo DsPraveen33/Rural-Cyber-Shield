@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Home as HomeIcon, BookOpen, Bot, AlertTriangle, Gavel, Phone } from "lucide-react";
 import NotFound from "@/pages/not-found";
+import { LanguageProvider, useLanguage } from "@/lib/language-context";
 
 import Home from "./pages/home";
 import Learning from "./pages/learning";
@@ -15,6 +16,7 @@ const queryClient = new QueryClient();
 
 function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
+  const { tr, toggle, lang } = useLanguage();
 
   const isActive = (path: string) => location === path;
 
@@ -25,10 +27,14 @@ function Layout({ children }: { children: React.ReactNode }) {
           <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-inner">
             <span className="text-primary font-black text-lg tracking-tighter">GR</span>
           </div>
-          <span className="font-bold text-lg md:text-xl tracking-tight">Gramin Rakshak</span>
+          <span className="font-bold text-lg md:text-xl tracking-tight">{tr.appName}</span>
         </Link>
-        <button className="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider transition-colors border border-white/10">
-          EN / TE
+        <button
+          onClick={toggle}
+          data-testid="button-lang-toggle"
+          className="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider transition-colors border border-white/10"
+        >
+          {lang === "en" ? "EN / TE" : "TE / EN"}
         </button>
       </header>
 
@@ -39,22 +45,22 @@ function Layout({ children }: { children: React.ReactNode }) {
       {/* Emergency Strip */}
       <div className="fixed bottom-[72px] md:bottom-0 left-0 right-0 z-40 bg-[#ffdad6] text-[#93000a] py-3 px-4 flex justify-center items-center gap-3 font-bold shadow-[0_-2px_10px_rgba(0,0,0,0.05)] border-t border-[#ba1a1a]/20">
         <Phone className="w-5 h-5 animate-pulse" />
-        <a href="tel:1930" className="hover:underline">Helpline: 1930</a>
+        <a href="tel:1930" className="hover:underline">{tr.helpline}</a>
       </div>
 
       {/* Mobile Bottom Nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t flex justify-around items-center h-[72px] px-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] pb-safe">
-        
+
         <Link href="/" className={`flex flex-col items-center justify-center w-full h-full transition-colors ${isActive('/') ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}>
           <HomeIcon className={`w-6 h-6 mb-1 ${isActive('/') ? 'fill-primary/20' : ''}`} />
-          <span className="text-[10px] font-bold">Home</span>
+          <span className="text-[10px] font-bold">{tr.navHome}</span>
         </Link>
-        
+
         <Link href="/learning" className={`flex flex-col items-center justify-center w-full h-full transition-colors ${isActive('/learning') || isActive('/quiz') ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}>
           <BookOpen className={`w-6 h-6 mb-1 ${isActive('/learning') ? 'fill-primary/20' : ''}`} />
-          <span className="text-[10px] font-bold">Learning</span>
+          <span className="text-[10px] font-bold">{tr.navLearning}</span>
         </Link>
-        
+
         <div className="w-full flex justify-center -mt-6">
           <Link href="/mitra" className="bg-primary text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg border-4 border-background hover:bg-primary/90 transition-transform active:scale-95">
             <Bot className="w-7 h-7" />
@@ -63,12 +69,12 @@ function Layout({ children }: { children: React.ReactNode }) {
 
         <Link href="/emergency" className={`flex flex-col items-center justify-center w-full h-full transition-colors ${isActive('/emergency') ? 'text-destructive' : 'text-muted-foreground hover:text-destructive'}`}>
           <AlertTriangle className={`w-6 h-6 mb-1 ${isActive('/emergency') ? 'fill-destructive/20' : ''}`} />
-          <span className="text-[10px] font-bold">Emergency</span>
+          <span className="text-[10px] font-bold">{tr.navEmergency}</span>
         </Link>
-        
+
         <button className="flex flex-col items-center justify-center w-full h-full text-muted-foreground hover:text-primary transition-colors">
           <Gavel className="w-6 h-6 mb-1" />
-          <span className="text-[10px] font-bold">Report</span>
+          <span className="text-[10px] font-bold">{tr.navReport}</span>
         </button>
 
       </nav>
@@ -95,9 +101,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
-        </WouterRouter>
+        <LanguageProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+            <Router />
+          </WouterRouter>
+        </LanguageProvider>
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>

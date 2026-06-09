@@ -1,26 +1,30 @@
 import { useState } from "react";
 import { useGetTips } from "@workspace/api-client-react";
-import { BookOpen, Search, Filter, Lock, Phone, CreditCard, ShieldCheck, Badge } from "lucide-react";
+import { BookOpen, Search, Lock, Phone, CreditCard, ShieldCheck } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/lib/language-context";
 
-const CATEGORIES = ["All", "phishing", "upi", "aadhaar", "password", "whatsapp"];
+const RAW_CATEGORIES = ["All", "phishing", "upi", "aadhaar", "password", "whatsapp"];
 
 export default function Learning() {
+  const { tr } = useLanguage();
   const { data: tips, isLoading } = useGetTips();
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredTips = tips?.filter(tip => {
     const matchesCategory = activeCategory === "All" || tip.category === activeCategory;
-    const matchesSearch = tip.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          tip.body.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      tip.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tip.body.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   const getCategoryIcon = (category: string) => {
-    switch(category) {
+    switch (category) {
       case 'phishing': return <Search className="w-5 h-5 text-blue-500" />;
       case 'upi': return <CreditCard className="w-5 h-5 text-green-500" />;
       case 'aadhaar': return <Lock className="w-5 h-5 text-amber-500" />;
@@ -30,19 +34,31 @@ export default function Learning() {
     }
   };
 
+  const getCategoryLabel = (cat: string) => {
+    switch (cat) {
+      case "All": return tr.catAll;
+      case "phishing": return tr.catPhishing;
+      case "upi": return tr.catUpi;
+      case "aadhaar": return tr.catAadhaar;
+      case "password": return tr.catPassword;
+      case "whatsapp": return tr.catWhatsapp;
+      default: return cat.charAt(0).toUpperCase() + cat.slice(1);
+    }
+  };
+
   return (
     <div className="space-y-6 pb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold text-foreground">Learning Hub</h1>
-        <p className="text-muted-foreground text-sm">Master cyber safety to protect yourself and your family.</p>
+        <h1 className="text-2xl font-bold text-foreground">{tr.learningTitle}</h1>
+        <p className="text-muted-foreground text-sm">{tr.learningSubtitle}</p>
       </div>
 
       {/* Overall Progress */}
       <div className="bg-primary/5 rounded-2xl p-5 border border-primary/10">
         <div className="flex justify-between items-end mb-2">
           <div>
-            <h3 className="font-semibold text-sm text-foreground">Your Progress</h3>
-            <p className="text-xs text-muted-foreground">Beginner Guardian</p>
+            <h3 className="font-semibold text-sm text-foreground">{tr.yourProgress}</h3>
+            <p className="text-xs text-muted-foreground">{tr.beginnerGuardian}</p>
           </div>
           <span className="font-bold text-primary">30%</span>
         </div>
@@ -53,26 +69,28 @@ export default function Learning() {
       <div className="space-y-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search lessons..." 
+          <Input
+            placeholder={tr.searchLessons}
             className="pl-9 bg-white border-border/50"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            data-testid="input-search-lessons"
           />
         </div>
-        
+
         <div className="flex overflow-x-auto pb-2 -mx-4 px-4 gap-2 scrollbar-none">
-          {CATEGORIES.map(category => (
+          {RAW_CATEGORIES.map(category => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
+              data-testid={`button-category-${category}`}
               className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                activeCategory === category 
-                  ? "bg-primary text-primary-foreground" 
+                activeCategory === category
+                  ? "bg-primary text-primary-foreground"
                   : "bg-white border border-border/50 text-foreground hover:bg-muted"
               }`}
             >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
+              {getCategoryLabel(category)}
             </button>
           ))}
         </div>
@@ -87,12 +105,16 @@ export default function Learning() {
         ) : filteredTips?.length === 0 ? (
           <div className="text-center py-10 bg-white rounded-xl border border-border/50">
             <BookOpen className="w-10 h-10 text-muted-foreground mx-auto mb-3 opacity-50" />
-            <h3 className="font-semibold text-foreground">No lessons found</h3>
-            <p className="text-sm text-muted-foreground">Try a different search term.</p>
+            <h3 className="font-semibold text-foreground">{tr.noLessonsFound}</h3>
+            <p className="text-sm text-muted-foreground">{tr.tryDifferentSearch}</p>
           </div>
         ) : (
           filteredTips?.map((tip) => (
-            <div key={tip.id} className="bg-white rounded-xl p-4 shadow-sm border border-border/50 flex gap-4 active:scale-[0.98] transition-transform cursor-pointer">
+            <div
+              key={tip.id}
+              data-testid={`card-tip-${tip.id}`}
+              className="bg-white rounded-xl p-4 shadow-sm border border-border/50 flex gap-4 active:scale-[0.98] transition-transform cursor-pointer"
+            >
               <div className="bg-muted w-12 h-12 rounded-lg flex items-center justify-center shrink-0">
                 {getCategoryIcon(tip.category)}
               </div>

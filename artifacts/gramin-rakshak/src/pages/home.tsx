@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { Link } from "wouter";
 import { useGetCommunityStats, useGetThreats, useGetDailyTip } from "@workspace/api-client-react";
-import { Bot, Shield, AlertTriangle, ArrowRight, Activity, Users, ShieldAlert, Phone } from "lucide-react";
+import { Bot, ArrowRight, Activity, Users, ShieldAlert, Phone } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/language-context";
 
 export default function Home() {
+  const { tr } = useLanguage();
   const { data: stats, isLoading: statsLoading } = useGetCommunityStats();
   const { data: threats, isLoading: threatsLoading } = useGetThreats();
   const { data: dailyTip, isLoading: tipLoading } = useGetDailyTip();
@@ -27,9 +27,9 @@ export default function Home() {
       {/* Community Stats */}
       <section className="bg-primary rounded-2xl p-6 text-primary-foreground shadow-lg relative overflow-hidden">
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-        <h2 className="text-xl font-bold mb-1">Community Safety</h2>
-        <p className="text-primary-foreground/80 text-sm mb-6">Your village is highly protected. Keep learning to stay safe.</p>
-        
+        <h2 className="text-xl font-bold mb-1">{tr.communityTitle}</h2>
+        <p className="text-primary-foreground/80 text-sm mb-6">{tr.communitySubtitle}</p>
+
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded-xl shadow-sm text-card-foreground flex flex-col items-center justify-center relative">
             {statsLoading ? (
@@ -38,11 +38,11 @@ export default function Home() {
               <div className="relative w-20 h-20 flex items-center justify-center">
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                   <circle cx="50" cy="50" r="40" className="stroke-muted fill-none" strokeWidth="8" />
-                  <circle 
-                    cx="50" cy="50" r="40" 
-                    className="stroke-secondary fill-none" 
-                    strokeWidth="8" 
-                    strokeDasharray="251.2" 
+                  <circle
+                    cx="50" cy="50" r="40"
+                    className="stroke-secondary fill-none"
+                    strokeWidth="8"
+                    strokeDasharray="251.2"
                     strokeDashoffset={251.2 - (251.2 * (stats?.safetyScore || 0)) / 100}
                     strokeLinecap="round"
                   />
@@ -50,32 +50,40 @@ export default function Home() {
                 <span className="absolute font-bold text-xl">{stats?.safetyScore || 0}%</span>
               </div>
             )}
-            <span className="text-xs font-semibold mt-2 text-muted-foreground">Safety Score</span>
+            <span className="text-xs font-semibold mt-2 text-muted-foreground">{tr.safetyScore}</span>
           </div>
 
           <div className="flex flex-col gap-2">
             <div className="bg-white/10 rounded-xl p-3 flex items-center gap-3">
               <Users className="w-5 h-5 text-accent" />
               <div>
-                <p className="text-xs text-primary-foreground/70">Awareness</p>
-                {statsLoading ? <Skeleton className="w-12 h-4 mt-1 bg-white/20" /> : <p className="font-semibold text-sm">{stats?.awarenessCount} trained</p>}
+                <p className="text-xs text-primary-foreground/70">{tr.awareness}</p>
+                {statsLoading ? (
+                  <Skeleton className="w-12 h-4 mt-1 bg-white/20" />
+                ) : (
+                  <p className="font-semibold text-sm">{stats?.awarenessCount} {tr.trained}</p>
+                )}
               </div>
             </div>
             <div className="bg-white/10 rounded-xl p-3 flex items-center gap-3">
               <Activity className="w-5 h-5 text-accent" />
               <div>
-                <p className="text-xs text-primary-foreground/70">Readiness</p>
-                {statsLoading ? <Skeleton className="w-12 h-4 mt-1 bg-white/20" /> : <p className="font-semibold text-sm">{stats?.readinessPercent}%</p>}
+                <p className="text-xs text-primary-foreground/70">{tr.readiness}</p>
+                {statsLoading ? (
+                  <Skeleton className="w-12 h-4 mt-1 bg-white/20" />
+                ) : (
+                  <p className="font-semibold text-sm">{stats?.readinessPercent}%</p>
+                )}
               </div>
             </div>
           </div>
         </div>
       </section>
-      
+
       {/* Daily Tip */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-foreground">Tip of the Day</h2>
+          <h2 className="text-lg font-bold text-foreground">{tr.tipOfTheDay}</h2>
         </div>
         {tipLoading ? (
           <Skeleton className="w-full h-32 rounded-2xl" />
@@ -98,12 +106,12 @@ export default function Home() {
       {/* Common Threats */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-foreground">Recent Threats in Area</h2>
+          <h2 className="text-lg font-bold text-foreground">{tr.recentThreats}</h2>
           <Link href="/learning" className="text-sm text-primary font-medium flex items-center gap-1">
-            Learn More <ArrowRight className="w-4 h-4" />
+            {tr.learnMore} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        
+
         <div className="space-y-3">
           {threatsLoading ? (
             Array.from({ length: 3 }).map((_, i) => (
@@ -140,8 +148,8 @@ export default function Home() {
               <Phone className="w-8 h-8" />
             </div>
             <div>
-              <h3 className="text-lg font-bold">Cyber Crime Helpline</h3>
-              <p className="text-destructive-foreground/90 text-sm font-medium">Tap to call 1930 immediately</p>
+              <h3 className="text-lg font-bold">{tr.cyberHelpline}</h3>
+              <p className="text-destructive-foreground/90 text-sm font-medium">{tr.tapToCall}</p>
             </div>
           </div>
         </a>

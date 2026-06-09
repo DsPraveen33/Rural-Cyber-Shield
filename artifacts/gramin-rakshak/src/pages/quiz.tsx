@@ -1,23 +1,25 @@
 import { useState } from "react";
 import { useGetQuizQuestions, useSubmitQuiz } from "@workspace/api-client-react";
-import { HelpCircle, CheckCircle2, XCircle, Award, RefreshCcw, ArrowRight } from "lucide-react";
+import { HelpCircle, CheckCircle2, Award, RefreshCcw, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLanguage } from "@/lib/language-context";
 
 export default function Quiz() {
+  const { tr } = useLanguage();
   const { data: questions, isLoading } = useGetQuizQuestions();
   const submitQuiz = useSubmitQuiz();
-  
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<{questionId: number, selectedIndex: number}[]>([]);
+  const [answers, setAnswers] = useState<{ questionId: number; selectedIndex: number }[]>([]);
   const [isFinished, setIsFinished] = useState(false);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
   const handleNext = () => {
     if (!questions) return;
-    
+
     const newAnswers = [...answers, { questionId: questions[currentIndex].id, selectedIndex: selectedOption! }];
     setAnswers(newAnswers);
     setSelectedOption(null);
@@ -26,9 +28,7 @@ export default function Quiz() {
       setCurrentIndex(prev => prev + 1);
     } else {
       setIsFinished(true);
-      submitQuiz.mutate({
-        data: { answers: newAnswers }
-      });
+      submitQuiz.mutate({ data: { answers: newAnswers } });
     }
   };
 
@@ -47,14 +47,14 @@ export default function Quiz() {
         <Skeleton className="w-full h-4" />
         <Skeleton className="w-full h-40 rounded-xl" />
         <div className="space-y-3">
-          {[1,2,3,4].map(i => <Skeleton key={i} className="w-full h-16 rounded-xl" />)}
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="w-full h-16 rounded-xl" />)}
         </div>
       </div>
     );
   }
 
   if (!questions || questions.length === 0) {
-    return <div className="p-8 text-center text-muted-foreground">No questions available.</div>;
+    return <div className="p-8 text-center text-muted-foreground">{tr.quizNone}</div>;
   }
 
   if (isFinished) {
@@ -64,11 +64,11 @@ export default function Quiz() {
     return (
       <div className="max-w-md mx-auto space-y-6 py-8 animate-in zoom-in-95 duration-500">
         <div className="bg-white rounded-2xl p-8 text-center shadow-lg border border-border/50 relative overflow-hidden">
-          
+
           {isPending ? (
             <div className="flex flex-col items-center py-8">
               <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4" />
-              <h2 className="text-xl font-bold">Calculating Score...</h2>
+              <h2 className="text-xl font-bold">{tr.quizCalculating}</h2>
             </div>
           ) : result ? (
             <>
@@ -76,27 +76,25 @@ export default function Quiz() {
               <div className="w-24 h-24 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Award className="w-12 h-12 text-secondary" />
               </div>
-              
-              <h2 className="text-2xl font-bold text-foreground mb-2">Quiz Complete!</h2>
+
+              <h2 className="text-2xl font-bold text-foreground mb-2">{tr.quizComplete}</h2>
               <div className="text-5xl font-black text-primary mb-4">{result.percentage}%</div>
-              
-              <p className="text-muted-foreground mb-6 font-medium px-4">
-                {result.feedback}
-              </p>
-              
+
+              <p className="text-muted-foreground mb-6 font-medium px-4">{result.feedback}</p>
+
               {result.badge && (
                 <div className="bg-accent/30 border border-primary/20 text-primary font-bold py-2 px-4 rounded-lg inline-flex items-center gap-2 mb-8">
                   <CheckCircle2 className="w-5 h-5 text-secondary" />
-                  Earned: {result.badge}
+                  {tr.quizEarned} {result.badge}
                 </div>
               )}
 
-              <Button onClick={handleRestart} className="w-full font-bold h-12 rounded-xl" variant="outline">
-                <RefreshCcw className="w-4 h-4 mr-2" /> Take Quiz Again
+              <Button onClick={handleRestart} className="w-full font-bold h-12 rounded-xl" variant="outline" data-testid="button-quiz-restart">
+                <RefreshCcw className="w-4 h-4 mr-2" /> {tr.quizRetake}
               </Button>
             </>
           ) : (
-            <div className="text-destructive font-semibold">Error submitting quiz. Please try again.</div>
+            <div className="text-destructive font-semibold">{tr.quizError}</div>
           )}
         </div>
       </div>
@@ -104,7 +102,7 @@ export default function Quiz() {
   }
 
   const currentQ = questions[currentIndex];
-  const progress = ((currentIndex) / questions.length) * 100;
+  const progress = (currentIndex / questions.length) * 100;
 
   return (
     <div className="max-w-xl mx-auto pb-10 animate-in fade-in duration-300">
@@ -112,11 +110,11 @@ export default function Quiz() {
       <div className="mb-8">
         <div className="flex justify-between items-end mb-3">
           <h1 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <HelpCircle className="w-6 h-6 text-primary" /> 
-            Safety Quiz
+            <HelpCircle className="w-6 h-6 text-primary" />
+            {tr.quizTitle}
           </h1>
           <span className="text-sm font-semibold text-muted-foreground bg-white px-3 py-1 rounded-full border shadow-sm">
-            {currentIndex + 1} of {questions.length}
+            {currentIndex + 1} {tr.quizOf} {questions.length}
           </span>
         </div>
         <Progress value={progress} className="h-2.5 bg-border/50" />
@@ -134,9 +132,10 @@ export default function Quiz() {
             <button
               key={idx}
               onClick={() => setSelectedOption(idx)}
+              data-testid={`button-quiz-option-${idx}`}
               className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 flex items-center justify-between ${
-                selectedOption === idx 
-                  ? 'border-primary bg-primary/5 shadow-sm' 
+                selectedOption === idx
+                  ? 'border-primary bg-primary/5 shadow-sm'
                   : 'border-transparent bg-muted/50 hover:bg-muted text-foreground'
               }`}
             >
@@ -153,12 +152,13 @@ export default function Quiz() {
 
       {/* Footer Action */}
       <div className="flex justify-end">
-        <Button 
-          onClick={handleNext} 
+        <Button
+          onClick={handleNext}
           disabled={selectedOption === null}
           className="w-full sm:w-auto h-14 px-8 rounded-full font-bold text-lg shadow-md disabled:shadow-none"
+          data-testid="button-quiz-next"
         >
-          {currentIndex === questions.length - 1 ? 'Finish Quiz' : 'Next Question'} 
+          {currentIndex === questions.length - 1 ? tr.quizFinish : tr.quizNext}
           <ArrowRight className="w-5 h-5 ml-2" />
         </Button>
       </div>
