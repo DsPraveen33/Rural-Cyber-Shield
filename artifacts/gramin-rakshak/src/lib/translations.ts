@@ -79,6 +79,16 @@ export const t = {
     quizError: "Error submitting quiz. Please try again.",
     quizNone: "No questions available.",
 
+    // Know Your Scammer flashcards
+    flashcardsTitle: "Know Your Scammer",
+    flashcardsSubtitle: "Learn the exact scripts scammers use — and how to shut them down",
+    flashcardsScript: "What the scammer says",
+    flashcardsRedFlags: "Red Flags",
+    flashcardsWhatToDo: "What to Do",
+    flashcardsPrev: "Previous",
+    flashcardsNext: "Next",
+    flashcardsOf: "of",
+
     // Scam of the Week
     scamOfWeekLabel: "SCAM OF THE WEEK",
     scamOfWeekCaseTitle: "Real Case",
@@ -276,6 +286,16 @@ export const t = {
     quizRetake: "మళ్లీ క్విజ్ తీసుకోండి",
     quizError: "క్విజ్ సమర్పించడంలో లోపం. దయచేసి మళ్లీ ప్రయత్నించండి.",
     quizNone: "ప్రశ్నలు అందుబాటులో లేవు.",
+
+    // Know Your Scammer flashcards
+    flashcardsTitle: "మోసగాడిని గుర్తించండి",
+    flashcardsSubtitle: "మోసగాళ్ళు ఉపయోగించే అసలు స్క్రిప్ట్‌లు నేర్చుకోండి — మరియు వాటిని ఆపడం ఎలా",
+    flashcardsScript: "మోసగాడు ఏమి చెబుతాడు",
+    flashcardsRedFlags: "ప్రమాద సూచనలు",
+    flashcardsWhatToDo: "ఏమి చేయాలి",
+    flashcardsPrev: "వెనక్కి",
+    flashcardsNext: "తదుపరి",
+    flashcardsOf: "లో",
 
     // Scam of the Week
     scamOfWeekLabel: "వారపు మోసం",

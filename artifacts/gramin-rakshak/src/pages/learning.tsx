@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useGetTips } from "@workspace/api-client-react";
-import { BookOpen, Search, Lock, Phone, CreditCard, ShieldCheck, AlertOctagon, ChevronDown, ChevronUp, CheckCircle2, Share2, Check } from "lucide-react";
+import { BookOpen, Search, Lock, Phone, CreditCard, ShieldCheck, AlertOctagon, ChevronDown, ChevronUp, CheckCircle2, Share2, Check, ChevronLeft, ChevronRight, TriangleAlert } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/language-context";
 import { recordTipRead } from "@/lib/progress";
 import { getScamOfWeek, getWeekLabel, buildShareText } from "@/lib/scam-of-week";
+import { FLASHCARDS } from "@/lib/flashcards";
 
 const RAW_CATEGORIES = ["All", "phishing", "upi", "aadhaar", "password", "whatsapp"];
 
@@ -18,6 +19,14 @@ export default function Learning() {
   const [searchQuery, setSearchQuery] = useState("");
   const [scamExpanded, setScamExpanded] = useState(false);
   const [shareDone, setShareDone] = useState(false);
+  const [cardIdx, setCardIdx] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  function goToCard(idx: number) {
+    const clamped = Math.max(0, Math.min(FLASHCARDS.length - 1, idx));
+    setCardIdx(clamped);
+    scrollRef.current?.children[clamped]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }
 
   const scam = getScamOfWeek();
   const weekLabel = getWeekLabel(lang);
@@ -202,6 +211,126 @@ export default function Learning() {
           )}
         </div>
       </div>
+
+      {/* ── Know Your Scammer Flashcards ──────────────────── */}
+      <section>
+        <div className="mb-3">
+          <h2 className="text-lg font-bold text-foreground">{tr.flashcardsTitle}</h2>
+          <p className="text-xs text-muted-foreground mt-0.5">{tr.flashcardsSubtitle}</p>
+        </div>
+
+        {/* Card carousel */}
+        <div
+          ref={scrollRef}
+          className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-1 scrollbar-hide"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          onScroll={(e) => {
+            const el = e.currentTarget;
+            const idx = Math.round(el.scrollLeft / el.offsetWidth);
+            setCardIdx(idx);
+          }}
+        >
+          {FLASHCARDS.map((card) => {
+            const title = lang === "te" ? card.scamTypeTe : card.scamType;
+            const script = lang === "te" ? card.scriptTe : card.script;
+            const redFlags = lang === "te" ? card.redFlagsTe : card.redFlags;
+            const whatToDo = lang === "te" ? card.whatToDoTe : card.whatToDo;
+
+            return (
+              <div
+                key={card.id}
+                className={`snap-center shrink-0 w-full rounded-2xl overflow-hidden border border-black/10 shadow-sm flex flex-col ${card.color}`}
+              >
+                {/* Accent top bar */}
+                <div className={`h-1.5 w-full ${card.accentColor}`} />
+
+                <div className="p-4 flex flex-col gap-3 flex-1">
+                  {/* Header */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl leading-none">{card.icon}</span>
+                      <span className={`text-xs font-black uppercase tracking-wider ${card.textAccent}`}>{title}</span>
+                    </div>
+                    <span className="text-[10px] text-muted-foreground font-medium">
+                      {card.id} {tr.flashcardsOf} {FLASHCARDS.length}
+                    </span>
+                  </div>
+
+                  {/* Script bubble */}
+                  <div className="bg-white/80 rounded-xl p-3 border border-black/5 relative">
+                    <p className={`text-[9px] font-black uppercase tracking-widest mb-1.5 flex items-center gap-1 ${card.textAccent}`}>
+                      <span>💬</span> {tr.flashcardsScript}
+                    </p>
+                    <p className="text-sm text-foreground leading-relaxed italic">{script}</p>
+                    {/* Quote corner */}
+                    <div className={`absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full flex items-center justify-center ${card.accentColor}`}>
+                      <span className="text-white text-[10px] font-black">"</span>
+                    </div>
+                  </div>
+
+                  {/* Red flags */}
+                  <div>
+                    <p className={`text-[9px] font-black uppercase tracking-widest mb-1.5 flex items-center gap-1 ${card.textAccent}`}>
+                      <TriangleAlert className="w-3 h-3" /> {tr.flashcardsRedFlags}
+                    </p>
+                    <ul className="space-y-1.5">
+                      {redFlags.map((flag, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-red-500 font-black text-xs mt-0.5 shrink-0">🚩</span>
+                          <span className="text-xs text-foreground leading-snug">{flag}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* What to do */}
+                  <div className={`rounded-xl p-3 border ${card.accentColor.replace("bg-", "border-")}/30 bg-white/60`}>
+                    <p className={`text-[9px] font-black uppercase tracking-widest mb-1.5 flex items-center gap-1 ${card.textAccent}`}>
+                      <CheckCircle2 className="w-3 h-3" /> {tr.flashcardsWhatToDo}
+                    </p>
+                    <p className="text-sm text-foreground font-medium leading-snug">{whatToDo}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Navigation */}
+        <div className="flex items-center justify-between mt-3">
+          <button
+            onClick={() => goToCard(cardIdx - 1)}
+            disabled={cardIdx === 0}
+            className="flex items-center gap-1 text-xs font-semibold text-primary disabled:opacity-30 disabled:cursor-not-allowed px-2 py-1.5 rounded-lg hover:bg-primary/5 transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" /> {tr.flashcardsPrev}
+          </button>
+
+          {/* Dot indicators */}
+          <div className="flex gap-1.5">
+            {FLASHCARDS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goToCard(i)}
+                className={`rounded-full transition-all duration-200 ${
+                  i === cardIdx
+                    ? "w-5 h-2 bg-primary"
+                    : "w-2 h-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                }`}
+                aria-label={`Card ${i + 1}`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={() => goToCard(cardIdx + 1)}
+            disabled={cardIdx === FLASHCARDS.length - 1}
+            className="flex items-center gap-1 text-xs font-semibold text-primary disabled:opacity-30 disabled:cursor-not-allowed px-2 py-1.5 rounded-lg hover:bg-primary/5 transition-colors"
+          >
+            {tr.flashcardsNext} <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </section>
 
       {/* Overall Progress */}
       <div className="bg-primary/5 rounded-2xl p-5 border border-primary/10">
