@@ -79,6 +79,11 @@ export const t = {
     quizError: "Error submitting quiz. Please try again.",
     quizNone: "No questions available.",
 
+    // Scam of the Week
+    scamOfWeekLabel: "SCAM OF THE WEEK",
+    scamOfWeekCaseTitle: "Real Case",
+    scamOfWeekHowTo: "How to Stay Safe",
+
     // Re-engagement banner
     reminderTitle: "Welcome back! 👋",
     reminderDays: "days since your last visit",
@@ -257,6 +262,11 @@ export const t = {
     quizRetake: "మళ్లీ క్విజ్ తీసుకోండి",
     quizError: "క్విజ్ సమర్పించడంలో లోపం. దయచేసి మళ్లీ ప్రయత్నించండి.",
     quizNone: "ప్రశ్నలు అందుబాటులో లేవు.",
+
+    // Scam of the Week
+    scamOfWeekLabel: "వారపు మోసం",
+    scamOfWeekCaseTitle: "నిజమైన కేసు",
+    scamOfWeekHowTo: "సురక్షితంగా ఉండే విధానం",
 
     // Re-engagement banner
     reminderTitle: "స్వాగతం మళ్లీ! 👋",
