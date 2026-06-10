@@ -103,6 +103,40 @@ export interface QuizResult {
   badge?: string | null;
 }
 
+/**
+ * Response language
+ */
+export type CheckLinkInputLanguage = typeof CheckLinkInputLanguage[keyof typeof CheckLinkInputLanguage];
+
+
+export const CheckLinkInputLanguage = {
+  en: 'en',
+  te: 'te',
+} as const;
+
+export interface CheckLinkInput {
+  /** The URL to analyse */
+  url: string;
+  /** Response language */
+  language?: CheckLinkInputLanguage;
+}
+
+export type CheckLinkResultVerdict = typeof CheckLinkResultVerdict[keyof typeof CheckLinkResultVerdict];
+
+
+export const CheckLinkResultVerdict = {
+  safe: 'safe',
+  suspicious: 'suspicious',
+  dangerous: 'dangerous',
+} as const;
+
+export interface CheckLinkResult {
+  url: string;
+  verdict: CheckLinkResultVerdict;
+  explanation: string;
+  signals: string[];
+}
+
 export interface CommunityStats {
   /** Community safety score out of 100 */
   safetyScore: number;

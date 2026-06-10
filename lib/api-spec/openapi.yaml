@@ -135,6 +135,26 @@ paths:
               schema:
                 $ref: "#/components/schemas/QuizResult"
 
+  /check-link:
+    post:
+      operationId: checkLink
+      tags: [chat]
+      summary: Check if a URL is safe or phishing
+      description: Analyses a URL for phishing signals and returns a safety verdict
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckLinkInput"
+      responses:
+        "200":
+          description: Link analysis result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckLinkResult"
+
   /stats:
     get:
       operationId: getCommunityStats
@@ -287,6 +307,39 @@ components:
         badge:
           type: ["string", "null"]
           description: Badge earned (e.g. Cyber Safe Champion)
+
+    CheckLinkInput:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          description: The URL to analyse
+        language:
+          type: string
+          enum: [en, te]
+          description: Response language
+
+    CheckLinkResult:
+      type: object
+      required:
+        - url
+        - verdict
+        - explanation
+        - signals
+      properties:
+        url:
+          type: string
+        verdict:
+          type: string
+          enum: [safe, suspicious, dangerous]
+        explanation:
+          type: string
+        signals:
+          type: array
+          items:
+            type: string
 
     CommunityStats:
       type: object

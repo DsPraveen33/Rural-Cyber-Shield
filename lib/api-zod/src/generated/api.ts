@@ -109,6 +109,23 @@ export const SubmitQuizResponse = zod.object({
 
 
 /**
+ * Analyses a URL for phishing signals and returns a safety verdict
+ * @summary Check if a URL is safe or phishing
+ */
+export const CheckLinkBody = zod.object({
+  "url": zod.string().describe('The URL to analyse'),
+  "language": zod.enum(['en', 'te']).optional().describe('Response language')
+})
+
+export const CheckLinkResponse = zod.object({
+  "url": zod.string(),
+  "verdict": zod.enum(['safe', 'suspicious', 'dangerous']),
+  "explanation": zod.string(),
+  "signals": zod.array(zod.string())
+})
+
+
+/**
  * Returns community-wide safety metrics and scores
  * @summary Get community safety statistics
  */

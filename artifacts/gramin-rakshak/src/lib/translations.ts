@@ -79,6 +79,21 @@ export const t = {
     quizError: "Error submitting quiz. Please try again.",
     quizNone: "No questions available.",
 
+    // Check Link
+    checkLinkTab: "Check Link",
+    chatTab: "Chat",
+    checkLinkTitle: "Check a Suspicious Link",
+    checkLinkSubtitle: "Paste any URL or link you received to instantly check if it is safe or a scam.",
+    checkLinkPlaceholder: "Paste link here... e.g. https://example.com",
+    checkLinkButton: "Check Now",
+    checkLinkChecking: "Analysing...",
+    checkLinkVerdictSafe: "SAFE",
+    checkLinkVerdictSuspicious: "SUSPICIOUS",
+    checkLinkVerdictDangerous: "DANGEROUS",
+    checkLinkSignals: "Warning signals detected:",
+    checkLinkCheckAnother: "Check another link",
+    checkLinkTip: "Never click links sent by unknown numbers on WhatsApp or SMS without checking first.",
+
     // Report Fraud
     reportTitle: "Report Fraud",
     reportSubtitle: "Fill in the details below to generate a complaint letter you can submit to police or cybercrime.gov.in.",
@@ -212,6 +227,21 @@ export const t = {
     quizRetake: "మళ్లీ క్విజ్ తీసుకోండి",
     quizError: "క్విజ్ సమర్పించడంలో లోపం. దయచేసి మళ్లీ ప్రయత్నించండి.",
     quizNone: "ప్రశ్నలు అందుబాటులో లేవు.",
+
+    // Check Link
+    checkLinkTab: "లింక్ తనిఖీ",
+    chatTab: "చాట్",
+    checkLinkTitle: "అనుమానాస్పద లింక్ తనిఖీ చేయండి",
+    checkLinkSubtitle: "మీకు వచ్చిన ఏదైనా URL లేదా లింక్ పేస్ట్ చేసి అది సురక్షితమో లేదా మోసమో తక్షణమే తెలుసుకోండి.",
+    checkLinkPlaceholder: "ఇక్కడ లింక్ పేస్ట్ చేయండి... ఉదా: https://example.com",
+    checkLinkButton: "ఇప్పుడే తనిఖీ చేయండి",
+    checkLinkChecking: "విశ్లేషిస్తున్నాం...",
+    checkLinkVerdictSafe: "సురక్షితం",
+    checkLinkVerdictSuspicious: "అనుమానాస్పదం",
+    checkLinkVerdictDangerous: "ప్రమాదకరం",
+    checkLinkSignals: "హెచ్చరిక సంకేతాలు:",
+    checkLinkCheckAnother: "మరొక లింక్ తనిఖీ చేయండి",
+    checkLinkTip: "WhatsApp లేదా SMS ద్వారా తెలియని నంబర్ల నుండి వచ్చే లింక్‌లను తనిఖీ చేయకుండా ఎప్పుడూ క్లిక్ చేయకండి.",
 
     // Report Fraud
     reportTitle: "మోసాన్ని నివేదించండి",

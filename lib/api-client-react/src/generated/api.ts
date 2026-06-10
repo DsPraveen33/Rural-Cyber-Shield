@@ -22,6 +22,8 @@ import type {
 import type {
   ChatMessageInput,
   ChatResponse,
+  CheckLinkInput,
+  CheckLinkResult,
   CommunityStats,
   HealthStatus,
   QuizQuestion,
@@ -575,6 +577,78 @@ export const useSubmitQuiz = <TError = ErrorType<unknown>,
         TContext
       > => {
       return useMutation(getSubmitQuizMutationOptions(options));
+    }
+
+export const getCheckLinkUrl = () => {
+
+
+
+
+  return `/api/check-link`
+}
+
+/**
+ * Analyses a URL for phishing signals and returns a safety verdict
+ * @summary Check if a URL is safe or phishing
+ */
+export const checkLink = async (checkLinkInput: CheckLinkInput, options?: RequestInit): Promise<CheckLinkResult> => {
+
+  return customFetch<CheckLinkResult>(getCheckLinkUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      checkLinkInput,)
+  }
+);}
+
+
+
+
+export const getCheckLinkMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkLink>>, TError,{data: BodyType<CheckLinkInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof checkLink>>, TError,{data: BodyType<CheckLinkInput>}, TContext> => {
+
+const mutationKey = ['checkLink'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof checkLink>>, {data: BodyType<CheckLinkInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  checkLink(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CheckLinkMutationResult = NonNullable<Awaited<ReturnType<typeof checkLink>>>
+    export type CheckLinkMutationBody = BodyType<CheckLinkInput>
+    export type CheckLinkMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Check if a URL is safe or phishing
+ */
+export const useCheckLink = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof checkLink>>, TError,{data: BodyType<CheckLinkInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof checkLink>>,
+        TError,
+        {data: BodyType<CheckLinkInput>},
+        TContext
+      > => {
+      return useMutation(getCheckLinkMutationOptions(options));
     }
 
 export const getGetCommunityStatsUrl = () => {
