@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useGetQuizQuestions, useSubmitQuiz } from "@workspace/api-client-react";
 import { HelpCircle, CheckCircle2, Award, RefreshCcw, ArrowRight } from "lucide-react";
+import { recordQuizScore } from "@/lib/progress";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,7 +29,14 @@ export default function Quiz() {
       setCurrentIndex(prev => prev + 1);
     } else {
       setIsFinished(true);
-      submitQuiz.mutate({ data: { answers: newAnswers } });
+      submitQuiz.mutate(
+        { data: { answers: newAnswers } },
+        {
+          onSuccess: (data) => {
+            recordQuizScore(data.percentage);
+          }
+        }
+      );
     }
   };
 

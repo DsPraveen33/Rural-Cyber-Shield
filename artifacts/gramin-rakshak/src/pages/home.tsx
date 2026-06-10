@@ -1,16 +1,31 @@
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useGetCommunityStats, useGetThreats, useGetDailyTip } from "@workspace/api-client-react";
-import { Bot, ArrowRight, Activity, Users, ShieldAlert, Phone } from "lucide-react";
+import { Bot, ArrowRight, Activity, Users, ShieldAlert, Phone, TrendingUp, HelpCircle, BookOpen, Search as SearchIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/language-context";
+import { getProgress, calcScore, getSafetyLevel, type ProgressData } from "@/lib/progress";
 
 export default function Home() {
-  const { tr } = useLanguage();
+  const { tr, lang } = useLanguage();
   const { data: stats, isLoading: statsLoading } = useGetCommunityStats();
   const { data: threats, isLoading: threatsLoading } = useGetThreats();
   const { data: dailyTip, isLoading: tipLoading } = useGetDailyTip();
+
+  const [progress, setProgress] = useState<ProgressData | null>(null);
+
+  useEffect(() => {
+    setProgress(getProgress());
+    const onFocus = () => setProgress(getProgress());
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, []);
+
+  const score = progress ? calcScore(progress) : 0;
+  const level = getSafetyLevel(score);
+  const hasActivity = progress && (progress.quizzesTaken > 0 || progress.tipsRead > 0 || progress.linksChecked > 0);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -22,8 +37,16 @@ export default function Home() {
     }
   };
 
+  const statItems = [
+    { icon: <HelpCircle className="w-4 h-4" />, value: progress?.quizzesTaken ?? 0, label: tr.myScoreQuizzes, max: 3 },
+    { icon: <BookOpen className="w-4 h-4" />, value: progress?.tipsRead ?? 0, label: tr.myScoreTips, max: 5 },
+    { icon: <SearchIcon className="w-4 h-4" />, value: progress?.linksChecked ?? 0, label: tr.myScoreLinks, max: 3 },
+    { icon: <Activity className="w-4 h-4" />, value: progress?.daysActive ?? 0, label: tr.myScoreDays, max: 5 },
+  ];
+
   return (
     <div className="space-y-6 pb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+
       {/* Community Stats */}
       <section className="bg-primary rounded-2xl p-6 text-primary-foreground shadow-lg relative overflow-hidden">
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
@@ -78,6 +101,75 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ── My Safety Score ──────────────────────────────────── */}
+      <section>
+        <Card className={`border ${level.bg} shadow-sm overflow-hidden`}>
+          {/* Score bar at top */}
+          <div className="h-1.5 w-full bg-black/10">
+            <div
+              className={`h-full transition-all duration-700 ${level.bar}`}
+              style={{ width: `${score}%` }}
+            />
+          </div>
+
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <TrendingUp className={`w-5 h-5 ${level.color}`} />
+                <span className="font-bold text-foreground text-base">{tr.myScoreTitle}</span>
+              </div>
+              <span className={`text-xs font-medium ${level.color}`}>{tr.myScoreSubtitle}</span>
+            </div>
+
+            <div className="flex items-center gap-4 mb-4">
+              {/* Score ring */}
+              <div className="relative w-20 h-20 shrink-0">
+                <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" className="fill-none stroke-black/10" strokeWidth="10" />
+                  <circle
+                    cx="50" cy="50" r="38"
+                    className={`fill-none transition-all duration-700 ${level.bar.replace("bg-", "stroke-")}`}
+                    strokeWidth="10"
+                    strokeDasharray="238.76"
+                    strokeDashoffset={238.76 - (238.76 * score) / 100}
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="font-black text-xl text-foreground leading-none">{score}</span>
+                  <span className="text-[10px] text-muted-foreground font-medium">/100</span>
+                </div>
+              </div>
+
+              {/* Level badge + message */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="text-lg">{level.emoji}</span>
+                  <span className={`font-bold text-sm ${level.color}`}>
+                    {lang === "te" ? level.labelTe : level.label}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-snug">
+                  {hasActivity ? tr.myScoreImprove : tr.myScoreStart}
+                </p>
+              </div>
+            </div>
+
+            {/* Activity mini-stats */}
+            <div className="grid grid-cols-4 gap-2">
+              {statItems.map((item, i) => (
+                <div key={i} className="flex flex-col items-center bg-white/60 rounded-xl py-2 px-1 gap-0.5 border border-black/5">
+                  <div className={`${level.color} opacity-70`}>{item.icon}</div>
+                  <span className="font-black text-base text-foreground leading-none">{item.value}</span>
+                  <span className="text-[9px] text-muted-foreground font-medium text-center leading-tight">{item.label}</span>
+                </div>
+              ))}
+            </div>
+
+          </CardContent>
+        </Card>
       </section>
 
       {/* Daily Tip */}

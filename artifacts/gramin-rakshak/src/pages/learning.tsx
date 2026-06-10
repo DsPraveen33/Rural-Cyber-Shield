@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/language-context";
+import { recordTipRead } from "@/lib/progress";
 
 const RAW_CATEGORIES = ["All", "phishing", "upi", "aadhaar", "password", "whatsapp"];
 
@@ -113,6 +114,7 @@ export default function Learning() {
             <div
               key={tip.id}
               data-testid={`card-tip-${tip.id}`}
+              onClick={() => recordTipRead(tip.id)}
               className="bg-white rounded-xl p-4 shadow-sm border border-border/50 flex gap-4 active:scale-[0.98] transition-transform cursor-pointer"
             >
               <div className="bg-muted w-12 h-12 rounded-lg flex items-center justify-center shrink-0">

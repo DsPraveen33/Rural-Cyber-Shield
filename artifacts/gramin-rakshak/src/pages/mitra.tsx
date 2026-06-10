@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useSendChatMessage, useCheckLink } from "@workspace/api-client-react";
+import { recordLinkChecked } from "@/lib/progress";
 import {
   Bot, Send, Shield, Link2, Lock, Flag, HelpCircle, User,
   CheckCircle2, AlertTriangle, XCircle, Search, RotateCcw, Info,
@@ -122,6 +123,7 @@ export default function Mitra() {
       {
         onSuccess: (data) => {
           setLinkResult(data as LinkResult);
+          recordLinkChecked();
           setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
         },
         onError: () => {

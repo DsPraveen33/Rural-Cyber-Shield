@@ -79,6 +79,16 @@ export const t = {
     quizError: "Error submitting quiz. Please try again.",
     quizNone: "No questions available.",
 
+    // My Safety Score
+    myScoreTitle: "My Safety Score",
+    myScoreSubtitle: "Earned by your activity",
+    myScoreQuizzes: "Quizzes",
+    myScoreTips: "Tips Read",
+    myScoreLinks: "Links Checked",
+    myScoreDays: "Days Active",
+    myScoreStart: "Start your journey — take a quiz or read a tip!",
+    myScoreImprove: "Keep learning to reach the next level",
+
     // Nearby Cyber Help Centers
     nearbyTitle: "Find Nearby Cyber Help",
     nearbySubtitle: "Search by district name or PIN code to find the nearest cyber crime cell.",
@@ -239,6 +249,16 @@ export const t = {
     quizRetake: "మళ్లీ క్విజ్ తీసుకోండి",
     quizError: "క్విజ్ సమర్పించడంలో లోపం. దయచేసి మళ్లీ ప్రయత్నించండి.",
     quizNone: "ప్రశ్నలు అందుబాటులో లేవు.",
+
+    // My Safety Score
+    myScoreTitle: "నా సురక్షత స్కోర్",
+    myScoreSubtitle: "మీ కార్యకలాపాల ద్వారా సాధించారు",
+    myScoreQuizzes: "క్విజ్‌లు",
+    myScoreTips: "చదివిన చిట్కాలు",
+    myScoreLinks: "తనిఖీ చేసిన లింక్‌లు",
+    myScoreDays: "యాక్టివ్ రోజులు",
+    myScoreStart: "మీ ప్రయాణం ప్రారంభించండి — క్విజ్ తీసుకోండి లేదా చిట్కా చదవండి!",
+    myScoreImprove: "తదుపరి స్థాయికి చేరుకోవడానికి నేర్చుకుంటూ ఉండండి",
 
     // Nearby Cyber Help Centers
     nearbyTitle: "సమీప సైబర్ సహాయం కనుగొనండి",
