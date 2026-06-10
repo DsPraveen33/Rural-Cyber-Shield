@@ -192,6 +192,40 @@ export function getScamOfWeek(): ScamEntry {
   return SCAMS[weekIndex % SCAMS.length];
 }
 
+/** Build a WhatsApp-ready warning message for the given scam */
+export function buildShareText(scam: ScamEntry, lang: "en" | "te"): string {
+  if (lang === "te") {
+    return [
+      `⚠️ *వారపు సైబర్ హెచ్చరిక* ⚠️`,
+      ``,
+      `🚨 *${scam.tagTe}: ${scam.titleTe}*`,
+      ``,
+      `📍 *నిజమైన కేసు:*`,
+      scam.caseDescTe,
+      ``,
+      `✅ *సురక్షితంగా ఉండే విధానం:*`,
+      ...scam.howToStaySafeTe.map((t, i) => `${i + 1}. ${t}`),
+      ``,
+      `📞 సైబర్ నేరం జరిగితే వెంటనే *1930* కి కాల్ చేయండి.`,
+      `🛡️ _Gramin Rakshak యాప్ నుండి_`,
+    ].join("\n");
+  }
+  return [
+    `⚠️ *Cyber Safety Warning of the Week* ⚠️`,
+    ``,
+    `🚨 *${scam.tag}: ${scam.title}*`,
+    ``,
+    `📍 *Real Case:*`,
+    scam.caseDesc,
+    ``,
+    `✅ *How to Stay Safe:*`,
+    ...scam.howToStaySafe.map((t, i) => `${i + 1}. ${t}`),
+    ``,
+    `📞 If you are scammed, call *1930* immediately.`,
+    `🛡️ _Shared via Gramin Rakshak app_`,
+  ].join("\n");
+}
+
 /** Human-readable week label e.g. "Week of Jun 9, 2026" */
 export function getWeekLabel(lang: "en" | "te"): string {
   const now = new Date();

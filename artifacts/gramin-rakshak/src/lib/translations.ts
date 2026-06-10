@@ -83,6 +83,9 @@ export const t = {
     scamOfWeekLabel: "SCAM OF THE WEEK",
     scamOfWeekCaseTitle: "Real Case",
     scamOfWeekHowTo: "How to Stay Safe",
+    scamOfWeekShare: "Share Warning",
+    scamOfWeekShared: "Copied! Paste in WhatsApp",
+    scamOfWeekReadMore: "Read more",
 
     // Re-engagement banner
     reminderTitle: "Welcome back! 👋",
@@ -267,6 +270,9 @@ export const t = {
     scamOfWeekLabel: "వారపు మోసం",
     scamOfWeekCaseTitle: "నిజమైన కేసు",
     scamOfWeekHowTo: "సురక్షితంగా ఉండే విధానం",
+    scamOfWeekShare: "హెచ్చరిక షేర్ చేయండి",
+    scamOfWeekShared: "కాపీ అయింది! WhatsApp లో పేస్ట్ చేయండి",
+    scamOfWeekReadMore: "మరింత చదవండి",
 
     // Re-engagement banner
     reminderTitle: "స్వాగతం మళ్లీ! 👋",

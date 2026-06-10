@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useGetTips } from "@workspace/api-client-react";
-import { BookOpen, Search, Lock, Phone, CreditCard, ShieldCheck, AlertOctagon, ChevronDown, ChevronUp, CheckCircle2 } from "lucide-react";
+import { BookOpen, Search, Lock, Phone, CreditCard, ShieldCheck, AlertOctagon, ChevronDown, ChevronUp, CheckCircle2, Share2, Check } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/language-context";
 import { recordTipRead } from "@/lib/progress";
-import { getScamOfWeek, getWeekLabel } from "@/lib/scam-of-week";
+import { getScamOfWeek, getWeekLabel, buildShareText } from "@/lib/scam-of-week";
 
 const RAW_CATEGORIES = ["All", "phishing", "upi", "aadhaar", "password", "whatsapp"];
 
@@ -17,6 +17,7 @@ export default function Learning() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [scamExpanded, setScamExpanded] = useState(false);
+  const [shareDone, setShareDone] = useState(false);
 
   const scam = getScamOfWeek();
   const weekLabel = getWeekLabel(lang);
@@ -24,6 +25,28 @@ export default function Learning() {
   const scamTag = lang === "te" ? scam.tagTe : scam.tag;
   const scamCase = lang === "te" ? scam.caseDescTe : scam.caseDesc;
   const scamTips = lang === "te" ? scam.howToStaySafeTe : scam.howToStaySafe;
+
+  async function handleShareScam() {
+    const text = buildShareText(scam, lang);
+    // Try native share (mobile)
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ text });
+        return;
+      } catch {
+        // user cancelled or not supported — fall through
+      }
+    }
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(text);
+      setShareDone(true);
+      setTimeout(() => setShareDone(false), 3000);
+    } catch {
+      // last resort: open WhatsApp web
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+    }
+  }
 
   const filteredTips = tips?.filter(tip => {
     const matchesCategory = activeCategory === "All" || tip.category === activeCategory;
@@ -133,15 +156,49 @@ export default function Learning() {
             </div>
           )}
 
-          {/* Tap to expand hint */}
+          {/* Collapsed footer: Read more + Share */}
           {!scamExpanded && (
-            <button
-              onClick={() => setScamExpanded(true)}
-              className="mt-2 text-xs font-semibold text-primary flex items-center gap-1 hover:underline"
-              data-testid="button-scam-read-more"
-            >
-              Read more <ChevronDown className="w-3.5 h-3.5" />
-            </button>
+            <div className="mt-2 flex items-center justify-between">
+              <button
+                onClick={() => setScamExpanded(true)}
+                className="text-xs font-semibold text-primary flex items-center gap-1 hover:underline"
+                data-testid="button-scam-read-more"
+              >
+                {tr.scamOfWeekReadMore} <ChevronDown className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={handleShareScam}
+                className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all ${
+                  shareDone
+                    ? "bg-green-100 text-green-700 border border-green-200"
+                    : "bg-white/80 text-primary border border-primary/20 hover:bg-primary/5"
+                }`}
+                data-testid="button-scam-share"
+              >
+                {shareDone
+                  ? <><Check className="w-3.5 h-3.5" /> {tr.scamOfWeekShared}</>
+                  : <><Share2 className="w-3.5 h-3.5" /> {tr.scamOfWeekShare}</>}
+              </button>
+            </div>
+          )}
+
+          {/* Expanded footer: Share button */}
+          {scamExpanded && (
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={handleShareScam}
+                className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full transition-all shadow-sm ${
+                  shareDone
+                    ? "bg-green-100 text-green-700 border border-green-200"
+                    : "bg-white text-primary border border-primary/25 hover:bg-primary/5 hover:border-primary/40"
+                }`}
+                data-testid="button-scam-share-expanded"
+              >
+                {shareDone
+                  ? <><Check className="w-4 h-4" /> {tr.scamOfWeekShared}</>
+                  : <><Share2 className="w-4 h-4" /> {tr.scamOfWeekShare}</>}
+              </button>
+            </div>
           )}
         </div>
       </div>
