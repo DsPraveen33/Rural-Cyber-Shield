@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useGetCommunityStats, useGetThreats, useGetDailyTip } from "@workspace/api-client-react";
-import { Bot, ArrowRight, Activity, Users, ShieldAlert, Phone, TrendingUp, HelpCircle, BookOpen, Search as SearchIcon } from "lucide-react";
+import { Bot, ArrowRight, Activity, Users, ShieldAlert, Phone, TrendingUp, HelpCircle, BookOpen, Search as SearchIcon, Bell, X } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/language-context";
-import { getProgress, calcScore, getSafetyLevel, type ProgressData } from "@/lib/progress";
+import { getProgress, calcScore, getSafetyLevel, daysSinceLastActive, type ProgressData } from "@/lib/progress";
 
 export default function Home() {
   const { tr, lang } = useLanguage();
@@ -15,9 +15,17 @@ export default function Home() {
   const { data: dailyTip, isLoading: tipLoading } = useGetDailyTip();
 
   const [progress, setProgress] = useState<ProgressData | null>(null);
+  const [showBanner, setShowBanner] = useState(false);
+  const [daysAway, setDaysAway] = useState(0);
 
   useEffect(() => {
-    setProgress(getProgress());
+    const p = getProgress();
+    setProgress(p);
+    const days = daysSinceLastActive();
+    if (days >= 3) {
+      setDaysAway(days);
+      setShowBanner(true);
+    }
     const onFocus = () => setProgress(getProgress());
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);
@@ -46,6 +54,63 @@ export default function Home() {
 
   return (
     <div className="space-y-6 pb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+
+      {/* Re-engagement reminder banner */}
+      {showBanner && (
+        <div className="relative bg-amber-50 border border-amber-200 rounded-2xl p-4 shadow-sm animate-in slide-in-from-top-2 duration-400 overflow-hidden">
+          {/* Accent stripe */}
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-400 rounded-l-2xl" />
+
+          <div className="pl-3">
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <div className="flex items-center gap-2">
+                <div className="bg-amber-100 p-1.5 rounded-lg">
+                  <Bell className="w-4 h-4 text-amber-600" />
+                </div>
+                <div>
+                  <span className="font-bold text-foreground text-sm">{tr.reminderTitle}</span>
+                  <span className="text-xs text-amber-700 font-medium ml-2">
+                    {daysAway} {tr.reminderDays}
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowBanner(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors shrink-0 mt-0.5"
+                aria-label={tr.reminderDismiss}
+                data-testid="button-dismiss-reminder"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-xs text-muted-foreground leading-relaxed mb-3">{tr.reminderBody}</p>
+
+            <div className="flex gap-2 flex-wrap">
+              <Link href="/quiz">
+                <button
+                  onClick={() => setShowBanner(false)}
+                  className="inline-flex items-center gap-1.5 bg-primary text-primary-foreground text-xs font-bold px-3 py-1.5 rounded-full hover:bg-primary/90 active:scale-95 transition-all"
+                  data-testid="button-reminder-quiz"
+                >
+                  <HelpCircle className="w-3 h-3" />
+                  {tr.reminderQuiz}
+                </button>
+              </Link>
+              <Link href="/mitra">
+                <button
+                  onClick={() => setShowBanner(false)}
+                  className="inline-flex items-center gap-1.5 bg-white border border-amber-300 text-amber-700 text-xs font-bold px-3 py-1.5 rounded-full hover:bg-amber-50 active:scale-95 transition-all"
+                  data-testid="button-reminder-check-link"
+                >
+                  <SearchIcon className="w-3 h-3" />
+                  {tr.reminderCheckLink}
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Community Stats */}
       <section className="bg-primary rounded-2xl p-6 text-primary-foreground shadow-lg relative overflow-hidden">

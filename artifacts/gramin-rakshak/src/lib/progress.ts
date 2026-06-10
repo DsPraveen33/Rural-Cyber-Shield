@@ -86,6 +86,15 @@ export function calcScore(d: ProgressData): number {
   return Math.round(quizPart + tipsPart + linksPart + daysPart);
 }
 
+/** Returns the number of days since the user was last active (0 = today, -1 = never used) */
+export function daysSinceLastActive(): number {
+  const d = getProgress();
+  if (!d.lastActive) return -1;
+  const last = new Date(d.lastActive).getTime();
+  const now = Date.now();
+  return Math.floor((now - last) / 86_400_000);
+}
+
 export function getSafetyLevel(score: number): SafetyLevel {
   if (score >= 75) {
     return {

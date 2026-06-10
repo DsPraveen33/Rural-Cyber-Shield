@@ -79,6 +79,14 @@ export const t = {
     quizError: "Error submitting quiz. Please try again.",
     quizNone: "No questions available.",
 
+    // Re-engagement banner
+    reminderTitle: "Welcome back! 👋",
+    reminderDays: "days since your last visit",
+    reminderBody: "Scammers don't take breaks. Stay sharp — take a quick quiz or check a suspicious link today.",
+    reminderQuiz: "Take Quiz",
+    reminderCheckLink: "Check a Link",
+    reminderDismiss: "Dismiss",
+
     // My Safety Score
     myScoreTitle: "My Safety Score",
     myScoreSubtitle: "Earned by your activity",
@@ -249,6 +257,14 @@ export const t = {
     quizRetake: "మళ్లీ క్విజ్ తీసుకోండి",
     quizError: "క్విజ్ సమర్పించడంలో లోపం. దయచేసి మళ్లీ ప్రయత్నించండి.",
     quizNone: "ప్రశ్నలు అందుబాటులో లేవు.",
+
+    // Re-engagement banner
+    reminderTitle: "స్వాగతం మళ్లీ! 👋",
+    reminderDays: "రోజుల నుండి మీరు లేరు",
+    reminderBody: "మోసగాళ్ళు విశ్రాంతి తీసుకోరు. అప్రమత్తంగా ఉండండి — ఈరోజు క్విజ్ తీసుకోండి లేదా అనుమానాస్పద లింక్ తనిఖీ చేయండి.",
+    reminderQuiz: "క్విజ్ తీసుకోండి",
+    reminderCheckLink: "లింక్ తనిఖీ చేయండి",
+    reminderDismiss: "మూసివేయండి",
 
     // My Safety Score
     myScoreTitle: "నా సురక్షత స్కోర్",
