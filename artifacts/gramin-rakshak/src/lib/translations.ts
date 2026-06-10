@@ -105,6 +105,17 @@ export const t = {
     myScoreStart: "Start your journey — take a quiz or read a tip!",
     myScoreImprove: "Keep learning to reach the next level",
 
+    // Community Alerts
+    communityAlertsTitle: "Community Alerts",
+    communityAlertsSubtitle: "Scam reports from nearby districts today",
+    communityAlertsReported: "reported",
+    communityAlertsCases: "cases",
+    communityAlertsViewAll: "View All Threats",
+    communityAlertsSeverityCritical: "CRITICAL",
+    communityAlertsSeverityHigh: "HIGH",
+    communityAlertsSeverityModerate: "ALERT",
+    communityAlertsSeverityMonitor: "WATCH",
+
     // Nearby Cyber Help Centers
     nearbyTitle: "Find Nearby Cyber Help",
     nearbySubtitle: "Search by district name or PIN code to find the nearest cyber crime cell.",
@@ -291,6 +302,17 @@ export const t = {
     myScoreDays: "యాక్టివ్ రోజులు",
     myScoreStart: "మీ ప్రయాణం ప్రారంభించండి — క్విజ్ తీసుకోండి లేదా చిట్కా చదవండి!",
     myScoreImprove: "తదుపరి స్థాయికి చేరుకోవడానికి నేర్చుకుంటూ ఉండండి",
+
+    // Community Alerts
+    communityAlertsTitle: "కమ్యూనిటీ హెచ్చరికలు",
+    communityAlertsSubtitle: "ఈరోజు సమీప జిల్లాల నుండి మోసం నివేదికలు",
+    communityAlertsReported: "నివేదించారు",
+    communityAlertsCases: "కేసులు",
+    communityAlertsViewAll: "అన్ని బెదిరింపులు చూడండి",
+    communityAlertsSeverityCritical: "క్రిటికల్",
+    communityAlertsSeverityHigh: "హై",
+    communityAlertsSeverityModerate: "అలర్ట్",
+    communityAlertsSeverityMonitor: "వాచ్",
 
     // Nearby Cyber Help Centers
     nearbyTitle: "సమీప సైబర్ సహాయం కనుగొనండి",

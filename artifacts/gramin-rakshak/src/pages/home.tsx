@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useGetCommunityStats, useGetThreats, useGetDailyTip } from "@workspace/api-client-react";
-import { Bot, ArrowRight, Activity, Users, ShieldAlert, Phone, TrendingUp, HelpCircle, BookOpen, Search as SearchIcon, Bell, X } from "lucide-react";
+import { Bot, ArrowRight, Activity, Users, ShieldAlert, Phone, TrendingUp, HelpCircle, BookOpen, Search as SearchIcon, Bell, X, MapPin, Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/language-context";
 import { getProgress, calcScore, getSafetyLevel, daysSinceLastActive, type ProgressData } from "@/lib/progress";
+import { getCommunityAlerts, formatTimeAgo, type AlertSeverity } from "@/lib/community-alerts";
 
 export default function Home() {
   const { tr, lang } = useLanguage();
@@ -44,6 +45,26 @@ export default function Home() {
       default: return 'bg-muted text-muted-foreground';
     }
   };
+
+  const getAlertAccent = (severity: AlertSeverity) => {
+    switch (severity) {
+      case 'critical': return { border: 'border-red-300', bg: 'bg-red-50', bar: 'bg-red-500', badge: 'bg-red-500 text-white', dot: 'bg-red-500' };
+      case 'high': return { border: 'border-orange-300', bg: 'bg-orange-50', bar: 'bg-orange-500', badge: 'bg-orange-500 text-white', dot: 'bg-orange-500' };
+      case 'moderate': return { border: 'border-amber-300', bg: 'bg-amber-50', bar: 'bg-amber-500', badge: 'bg-amber-600 text-white', dot: 'bg-amber-500' };
+      case 'monitor': return { border: 'border-blue-300', bg: 'bg-blue-50', bar: 'bg-blue-500', badge: 'bg-blue-500 text-white', dot: 'bg-blue-400' };
+    }
+  };
+
+  const getSeverityLabel = (severity: AlertSeverity) => {
+    switch (severity) {
+      case 'critical': return tr.communityAlertsSeverityCritical;
+      case 'high': return tr.communityAlertsSeverityHigh;
+      case 'moderate': return tr.communityAlertsSeverityModerate;
+      case 'monitor': return tr.communityAlertsSeverityMonitor;
+    }
+  };
+
+  const communityAlerts = getCommunityAlerts();
 
   const statItems = [
     { icon: <HelpCircle className="w-4 h-4" />, value: progress?.quizzesTaken ?? 0, label: tr.myScoreQuizzes, max: 3 },
@@ -235,6 +256,70 @@ export default function Home() {
 
           </CardContent>
         </Card>
+      </section>
+
+      {/* ── Community Alerts ──────────────────────────────── */}
+      <section>
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h2 className="text-lg font-bold text-foreground">{tr.communityAlertsTitle}</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">{tr.communityAlertsSubtitle}</p>
+          </div>
+          <Link href="/learning" className="text-xs text-primary font-semibold flex items-center gap-1 shrink-0">
+            {tr.communityAlertsViewAll} <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="space-y-2.5">
+          {communityAlerts.map((alert) => {
+            const accent = getAlertAccent(alert.severity);
+            return (
+              <div
+                key={alert.id}
+                className={`rounded-xl border ${accent.border} ${accent.bg} overflow-hidden flex`}
+              >
+                {/* Left severity bar */}
+                <div className={`w-1 shrink-0 ${accent.bar}`} />
+
+                <div className="flex items-center gap-3 px-3 py-2.5 w-full min-w-0">
+                  {/* Icon + pulse dot */}
+                  <div className="relative shrink-0">
+                    <span className="text-2xl leading-none">{alert.icon}</span>
+                    <span className={`absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${accent.dot} animate-pulse`} />
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                      <span className={`text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-sm ${accent.badge}`}>
+                        {getSeverityLabel(alert.severity)}
+                      </span>
+                      <span className="text-xs font-bold text-foreground truncate">
+                        {lang === "te" ? alert.scamTypeTe : alert.scamType}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3 h-3 shrink-0" />
+                        {lang === "te" ? alert.districtTe : alert.district}
+                      </span>
+                      <span className="flex items-center gap-1 font-medium">
+                        <span className="text-foreground font-bold">{alert.reportCount}</span>
+                        &nbsp;{tr.communityAlertsCases}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Time */}
+                  <div className="shrink-0 flex items-center gap-1 text-[10px] text-muted-foreground">
+                    <Clock className="w-3 h-3" />
+                    <span className="whitespace-nowrap">{formatTimeAgo(alert.hoursAgo, lang)}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
       {/* Daily Tip */}
