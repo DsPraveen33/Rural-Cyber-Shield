@@ -79,6 +79,18 @@ export const t = {
     quizError: "Error submitting quiz. Please try again.",
     quizNone: "No questions available.",
 
+    // Nearby Cyber Help Centers
+    nearbyTitle: "Find Nearby Cyber Help",
+    nearbySubtitle: "Search by district name or PIN code to find the nearest cyber crime cell.",
+    nearbyPlaceholder: "e.g. Vijayawada, Hyderabad, 530001",
+    nearbySearch: "Search",
+    nearbyNoResults: "No cyber crime cell found for",
+    nearbyTryHint: "Try a district name or 6-digit PIN code",
+    nearbyCall: "Call",
+    nearbyAddress: "Address",
+    nearbyNationalHelpline: "National Helpline: 1930 (24×7)",
+    nearbyNationalDesc: "Available across all states and districts.",
+
     // Check Link
     checkLinkTab: "Check Link",
     chatTab: "Chat",
@@ -227,6 +239,18 @@ export const t = {
     quizRetake: "మళ్లీ క్విజ్ తీసుకోండి",
     quizError: "క్విజ్ సమర్పించడంలో లోపం. దయచేసి మళ్లీ ప్రయత్నించండి.",
     quizNone: "ప్రశ్నలు అందుబాటులో లేవు.",
+
+    // Nearby Cyber Help Centers
+    nearbyTitle: "సమీప సైబర్ సహాయం కనుగొనండి",
+    nearbySubtitle: "సమీప సైబర్ క్రైమ్ సెల్ కనుగొనడానికి జిల్లా పేరు లేదా PIN కోడ్ వెతకండి.",
+    nearbyPlaceholder: "ఉదా: విజయవాడ, హైదరాబాద్, 530001",
+    nearbySearch: "వెతకండి",
+    nearbyNoResults: "దీని కోసం సైబర్ క్రైమ్ సెల్ కనుగొనబడలేదు:",
+    nearbyTryHint: "జిల్లా పేరు లేదా 6 అంకెల PIN కోడ్ ప్రయత్నించండి",
+    nearbyCall: "కాల్ చేయండి",
+    nearbyAddress: "చిరునామా",
+    nearbyNationalHelpline: "జాతీయ సహాయవాణి: 1930 (24×7)",
+    nearbyNationalDesc: "అన్ని రాష్ట్రాలు మరియు జిల్లాలలో అందుబాటులో ఉంది.",
 
     // Check Link
     checkLinkTab: "లింక్ తనిఖీ",
