@@ -15,7 +15,9 @@
         "prettier": "^3.8.3",
         "typescript": "~5.9.3"
     },
-    "pnpm": {},
+    "pnpm": {
+        "onlyBuiltDependencies": ["esbuild"]
+    },
     "dependencies": {
         "@electric-sql/pglite": "^0.5.2"
     }

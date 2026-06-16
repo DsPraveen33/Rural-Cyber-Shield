@@ -3,7 +3,7 @@ services:
     name: rural-cyber-shield-api
     env: node
     plan: free
-    buildCommand: pnpm install --ignore-scripts && pnpm --filter @workspace/api-server run build
+    buildCommand: pnpm install && pnpm --filter @workspace/api-server run build
     startCommand: cd artifacts/api-server && npm run start
     envVars:
       - key: NODE_ENV
