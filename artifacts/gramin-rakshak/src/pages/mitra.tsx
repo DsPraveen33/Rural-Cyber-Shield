@@ -4,6 +4,7 @@ import { recordLinkChecked } from "@/lib/progress";
 import {
   Bot, Send, Shield, Link2, Lock, Flag, HelpCircle, User,
   CheckCircle2, AlertTriangle, XCircle, Search, RotateCcw, Info,
+  Mic, Volume2, Square
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +20,7 @@ type Message = {
 type Verdict = "safe" | "suspicious" | "dangerous";
 
 type LinkResult = {
-  url: string;
+  content: string;
   verdict: Verdict;
   explanation: string;
   signals: string[];
@@ -80,9 +81,78 @@ export default function Mitra() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, sendMessage.isPending]);
 
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = false;
+        recognitionRef.current.interimResults = true;
+        
+        recognitionRef.current.onresult = (event: any) => {
+          let currentTranscript = "";
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            currentTranscript += event.results[i][0].transcript;
+          }
+          setInput(currentTranscript);
+        };
+        
+        recognitionRef.current.onend = () => setIsListening(false);
+        recognitionRef.current.onerror = () => setIsListening(false);
+      }
+    }
+    return () => {
+      if (recognitionRef.current) recognitionRef.current.abort();
+      window.speechSynthesis.cancel();
+    };
+  }, []);
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    } else {
+      if (recognitionRef.current) {
+        setInput("");
+        recognitionRef.current.lang = lang === "te" ? "te-IN" : "en-IN";
+        try {
+          recognitionRef.current.start();
+          setIsListening(true);
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        alert("Your browser does not support voice input.");
+      }
+    }
+  };
+
+  const speakText = (text: string, id: string) => {
+    window.speechSynthesis.cancel();
+    if (speakingMsgId === id) {
+      setSpeakingMsgId(null);
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang === "te" ? "te-IN" : "en-IN";
+    utterance.rate = 0.9;
+    utterance.onend = () => setSpeakingMsgId(null);
+    utterance.onerror = () => setSpeakingMsgId(null);
+    setSpeakingMsgId(id);
+    window.speechSynthesis.speak(utterance);
+  };
+
   const handleSend = (text: string = input) => {
     if (!text.trim() || sendMessage.isPending) return;
-    // If user taps "Check Link" quick action, switch to check tab
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    }
+    
     if (text === tr.actionCheckLink) {
       setActiveTab("check");
       return;
@@ -94,9 +164,10 @@ export default function Mitra() {
       { data: { message: text, language: lang } },
       {
         onSuccess: (data) => {
+          const aiId = Date.now().toString();
           setMessages(prev => [
             ...prev,
-            { id: Date.now().toString(), role: "ai", text: data.reply, actions: data.suggestedActions },
+            { id: aiId, role: "ai", text: data.reply, actions: data.suggestedActions },
           ]);
         },
         onError: () => {
@@ -119,7 +190,7 @@ export default function Mitra() {
     if (!linkInput.trim() || checkLink.isPending) return;
     setLinkResult(null);
     checkLink.mutate(
-      { data: { url: linkInput.trim(), language: lang } },
+      { data: { content: linkInput.trim(), language: lang } },
       {
         onSuccess: (data) => {
           setLinkResult(data as LinkResult);
@@ -128,7 +199,7 @@ export default function Mitra() {
         },
         onError: () => {
           setLinkResult({
-            url: linkInput.trim(),
+            content: linkInput.trim(),
             verdict: "suspicious",
             explanation: tr.mitraError,
             signals: [],
@@ -213,6 +284,18 @@ export default function Mitra() {
                         : 'bg-[#e6f6ff] text-foreground rounded-bl-sm border border-[#c7dde9]'
                     }`}>
                       <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+                      {msg.role === 'ai' && (
+                        <button
+                          onClick={() => speakText(msg.text, msg.id)}
+                          className="mt-2 text-primary/60 hover:text-primary transition-colors flex items-center gap-1 text-[10px] font-semibold"
+                        >
+                          {speakingMsgId === msg.id ? (
+                            <><Square className="w-3 h-3" /> Stop</>
+                          ) : (
+                            <><Volume2 className="w-3 h-3" /> Read Aloud</>
+                          )}
+                        </button>
+                      )}
                     </div>
                     {msg.actions && msg.actions.length > 0 && (
                       <div className="flex flex-wrap gap-2">
@@ -268,13 +351,20 @@ export default function Mitra() {
           )}
 
           <div className="shrink-0 flex gap-2 items-center bg-white p-2 rounded-full shadow-md border border-border/50 mt-auto">
+            <Button
+              onClick={toggleListening}
+              variant="ghost"
+              className={`rounded-full w-10 h-10 p-0 shrink-0 ${isListening ? 'bg-red-100 text-red-600 animate-pulse' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              {isListening ? <Square className="w-4 h-4" /> : <Mic className="w-5 h-5" />}
+            </Button>
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder={tr.mitraPlaceholder}
-              className="flex-1 border-0 bg-transparent focus-visible:ring-0 shadow-none px-4 text-base"
-              disabled={sendMessage.isPending}
+              placeholder={isListening ? "Listening..." : tr.mitraPlaceholder}
+              className="flex-1 border-0 bg-transparent focus-visible:ring-0 shadow-none px-2 text-base"
+              disabled={sendMessage.isPending || isListening}
               data-testid="input-mitra-message"
             />
             <Button
@@ -348,7 +438,7 @@ export default function Mitra() {
                       : linkResult.verdict === "suspicious" ? tr.checkLinkVerdictSuspicious
                       : tr.checkLinkVerdictDangerous}
                   </span>
-                  <p className="text-xs text-muted-foreground mt-1 truncate">{linkResult.url}</p>
+                  <p className="text-xs text-muted-foreground mt-1 truncate">{linkResult.content}</p>
                 </div>
               </div>
 

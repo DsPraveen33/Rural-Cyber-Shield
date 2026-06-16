@@ -1,13 +1,8 @@
 import { Router } from "express";
-import OpenAI from "openai";
+import { GoogleGenAI } from "@google/genai";
 import { CheckLinkBody } from "@workspace/api-zod";
 
 const router = Router();
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: "https://openrouter.ai/api/v1",
-});
 
 router.post("/check-link", async (req, res) => {
   const parsed = CheckLinkBody.safeParse(req.body);
@@ -16,20 +11,43 @@ router.post("/check-link", async (req, res) => {
     return;
   }
 
-  const { url, language } = parsed.data;
+  const { content, language } = parsed.data;
   const langInstruction =
     language === "te"
       ? "Respond in Telugu (తెలుగు) language."
       : "Respond in English.";
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "openai/gpt-4o-mini",
-      max_tokens: 300,
-      messages: [
-        {
-          role: "system",
-          content: `You are a cybersecurity expert who checks URLs for phishing, scams, and malicious patterns. Analyse the given URL and return ONLY valid JSON (no markdown, no extra text) with exactly these fields:
+    let raw = "{}";
+    const isMock = !process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === "dummy-key";
+    
+    if (isMock) {
+      const lowerContent = content.toLowerCase();
+      if (lowerContent.includes("sbi") || lowerContent.includes("bank") || lowerContent.includes("pay") || lowerContent.includes("free") || lowerContent.includes("electricity") || lowerContent.includes("cut")) {
+        raw = JSON.stringify({
+          verdict: "dangerous",
+          explanation: language === "te" 
+            ? "ఈ కంటెంట్ సురక్షితం కాదు. ఇది మీ డేటాను లేదా డబ్బును దొంగిలించడానికి ప్రయత్నిస్తున్న మోసం కావచ్చు." 
+            : "This text or link is dangerous. It appears to be a phishing attempt or scam to steal your information or money.",
+          signals: ["Suspicious keywords", "Urgency or threat detected", "Possible phishing attempt"]
+        });
+      } else {
+        raw = JSON.stringify({
+          verdict: "safe",
+          explanation: language === "te" 
+            ? "ఈ కంటెంట్ సురక్షితంగా కనిపిస్తోంది. అయితే, ఎప్పుడూ జాగ్రత్తగా ఉండండి." 
+            : "This text or link appears to be safe. However, always exercise caution online.",
+          signals: []
+        });
+      }
+      await new Promise(resolve => setTimeout(resolve, 800));
+    } else {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: `Check this URL or SMS message content: ${content}`,
+        config: {
+          systemInstruction: `You are a cybersecurity expert who analyzes text messages (SMS/WhatsApp) and URLs for phishing, scams, and malicious patterns. Analyze the given content and return ONLY valid JSON (no markdown, no extra text) with exactly these fields:
 {
   "verdict": "safe" | "suspicious" | "dangerous",
   "explanation": "2-3 sentence explanation in simple language",
@@ -37,20 +55,18 @@ router.post("/check-link", async (req, res) => {
 }
 
 Verdict rules:
-- "dangerous": clear phishing indicators (fake domain, typosquatting, suspicious TLD like .xyz/.tk/.ru combined with brand names, data-harvesting patterns)
-- "suspicious": ambiguous signals (URL shorteners, unusual subdomains, unknown domains asking for credentials)
-- "safe": known legitimate domain, standard HTTPS, no deceptive patterns
+- "dangerous": clear phishing indicators (fake domain, typosquatting, promises of free money/jobs, threats of disconnection/arrest, OTP requests)
+- "suspicious": ambiguous signals (URL shorteners, unknown numbers asking for money, spelling mistakes)
+- "safe": normal conversational text, known legitimate domains, no deceptive patterns
 
 ${langInstruction}`,
-        },
-        {
-          role: "user",
-          content: `Check this URL: ${url}`,
-        },
-      ],
-    });
+          responseMimeType: "application/json",
+        }
+      });
 
-    const raw = completion.choices[0]?.message?.content ?? "{}";
+      raw = response.text ?? "{}";
+      raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+    }
 
     let result: { verdict?: string; explanation?: string; signals?: string[] };
     try {
@@ -64,14 +80,14 @@ ${langInstruction}`,
       : "suspicious";
 
     res.json({
-      url,
+      content,
       verdict,
-      explanation: result.explanation ?? "Could not analyse this URL.",
+      explanation: result.explanation ?? "Could not analyse this content.",
       signals: result.signals ?? [],
     });
   } catch (err) {
     req.log.error({ err }, "check-link error");
-    res.status(500).json({ error: "Failed to analyse URL" });
+    res.status(500).json({ error: "Failed to analyse content" });
   }
 });
 

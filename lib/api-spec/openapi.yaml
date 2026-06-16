@@ -169,6 +169,45 @@ paths:
               schema:
                 $ref: "#/components/schemas/CommunityStats"
 
+  /reports:
+    get:
+      operationId: getReports
+      tags: [reports]
+      summary: Get recent scam reports
+      description: Returns a list of recently reported scams by the community
+      responses:
+        "200":
+          description: List of reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Report"
+    post:
+      operationId: submitReport
+      tags: [reports]
+      summary: Submit a new scam report
+      description: Submits a new scam report to the community
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportScamInput"
+      responses:
+        "200":
+          description: Report submission result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: integer
+
 components:
   schemas:
     HealthStatus:
@@ -311,11 +350,11 @@ components:
     CheckLinkInput:
       type: object
       required:
-        - url
+        - content
       properties:
-        url:
+        content:
           type: string
-          description: The URL to analyse
+          description: The URL or SMS text to analyse
         language:
           type: string
           enum: [en, te]
@@ -324,12 +363,12 @@ components:
     CheckLinkResult:
       type: object
       required:
-        - url
+        - content
         - verdict
         - explanation
         - signals
       properties:
-        url:
+        content:
           type: string
         verdict:
           type: string
@@ -365,3 +404,53 @@ components:
         trend:
           type: string
           description: Trend description
+
+    ReportScamInput:
+      type: object
+      required:
+        - scamType
+        - description
+        - district
+      properties:
+        scamType:
+          type: string
+          description: The type of scam (e.g., Phishing, OTP, UPI)
+        description:
+          type: string
+          description: Details of the scam
+        district:
+          type: string
+          description: District where it occurred
+        contactNumber:
+          type: string
+          description: Associated phone number or UPI ID (optional)
+        severity:
+          type: string
+          enum: [critical, high, moderate, monitor]
+
+    Report:
+      type: object
+      required:
+        - id
+        - scamType
+        - description
+        - district
+        - severity
+        - createdAt
+      properties:
+        id:
+          type: integer
+        scamType:
+          type: string
+        description:
+          type: string
+        district:
+          type: string
+        contactNumber:
+          type: ["string", "null"]
+        severity:
+          type: string
+          enum: [critical, high, moderate, monitor]
+        createdAt:
+          type: string
+          format: date-time

@@ -6,6 +6,7 @@ import tipsRouter from "./tips";
 import threatsRouter from "./threats";
 import quizRouter from "./quiz";
 import statsRouter from "./stats";
+import reportsRouter from "./reports";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use(tipsRouter);
 router.use(threatsRouter);
 router.use(quizRouter);
 router.use(statsRouter);
+router.use(reportsRouter);
 
 export default router;

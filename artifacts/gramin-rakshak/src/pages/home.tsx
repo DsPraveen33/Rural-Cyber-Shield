@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { useGetCommunityStats, useGetThreats, useGetDailyTip } from "@workspace/api-client-react";
+import { useGetCommunityStats, useGetThreats, useGetDailyTip, useGetReports } from "@workspace/api-client-react";
 import { Bot, ArrowRight, Activity, Users, ShieldAlert, Phone, TrendingUp, HelpCircle, BookOpen, Search as SearchIcon, Bell, X, MapPin, Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,6 +14,7 @@ export default function Home() {
   const { data: stats, isLoading: statsLoading } = useGetCommunityStats();
   const { data: threats, isLoading: threatsLoading } = useGetThreats();
   const { data: dailyTip, isLoading: tipLoading } = useGetDailyTip();
+  const { data: reportsData } = useGetReports();
 
   const [progress, setProgress] = useState<ProgressData | null>(null);
   const [showBanner, setShowBanner] = useState(false);
@@ -265,30 +266,22 @@ export default function Home() {
             <h2 className="text-lg font-bold text-foreground">{tr.communityAlertsTitle}</h2>
             <p className="text-xs text-muted-foreground mt-0.5">{tr.communityAlertsSubtitle}</p>
           </div>
-          <Link href="/learning" className="text-xs text-primary font-semibold flex items-center gap-1 shrink-0">
-            {tr.communityAlertsViewAll} <ArrowRight className="w-3.5 h-3.5" />
+          <Link href="/report" className="text-xs bg-primary/10 text-primary px-3 py-1.5 rounded-full font-bold flex items-center gap-1 shrink-0 hover:bg-primary/20 transition-colors">
+            Report Scam
           </Link>
         </div>
 
         <div className="space-y-2.5">
-          {communityAlerts.map((alert) => {
+          {(!reportsData || reportsData.length === 0) ? communityAlerts.map((alert) => {
             const accent = getAlertAccent(alert.severity);
             return (
-              <div
-                key={alert.id}
-                className={`rounded-xl border ${accent.border} ${accent.bg} overflow-hidden flex`}
-              >
-                {/* Left severity bar */}
+              <div key={alert.id} className={`rounded-xl border ${accent.border} ${accent.bg} overflow-hidden flex`}>
                 <div className={`w-1 shrink-0 ${accent.bar}`} />
-
                 <div className="flex items-center gap-3 px-3 py-2.5 w-full min-w-0">
-                  {/* Icon + pulse dot */}
                   <div className="relative shrink-0">
                     <span className="text-2xl leading-none">{alert.icon}</span>
                     <span className={`absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${accent.dot} animate-pulse`} />
                   </div>
-
-                  {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
                       <span className={`text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-sm ${accent.badge}`}>
@@ -309,11 +302,49 @@ export default function Home() {
                       </span>
                     </div>
                   </div>
-
-                  {/* Time */}
                   <div className="shrink-0 flex items-center gap-1 text-[10px] text-muted-foreground">
                     <Clock className="w-3 h-3" />
                     <span className="whitespace-nowrap">{formatTimeAgo(alert.hoursAgo, lang)}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          }) : reportsData.map((report) => {
+            const accent = getAlertAccent(report.severity as any);
+            const hoursAgo = Math.max(1, Math.floor((new Date().getTime() - new Date(report.createdAt).getTime()) / (1000 * 60 * 60)));
+            const icon = report.scamType.toLowerCase().includes("upi") ? "💸" : report.scamType.toLowerCase().includes("otp") ? "💬" : "⚠️";
+            
+            return (
+              <div key={report.id} className={`rounded-xl border ${accent.border} ${accent.bg} overflow-hidden flex`}>
+                <div className={`w-1 shrink-0 ${accent.bar}`} />
+                <div className="flex items-center gap-3 px-3 py-2.5 w-full min-w-0">
+                  <div className="relative shrink-0">
+                    <span className="text-2xl leading-none">{icon}</span>
+                    <span className={`absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${accent.dot} animate-pulse`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                      <span className={`text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-sm ${accent.badge}`}>
+                        {getSeverityLabel(report.severity as any)}
+                      </span>
+                      <span className="text-xs font-bold text-foreground truncate">
+                        {report.scamType}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3 h-3 shrink-0" />
+                        {report.district}
+                      </span>
+                      <span className="flex items-center gap-1 font-medium">
+                        <span className="text-foreground font-bold">1</span>
+                        &nbsp;{tr.communityAlertsCases}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="shrink-0 flex items-center gap-1 text-[10px] text-muted-foreground">
+                    <Clock className="w-3 h-3" />
+                    <span className="whitespace-nowrap">{formatTimeAgo(hoursAgo, lang)}</span>
                   </div>
                 </div>
               </div>
