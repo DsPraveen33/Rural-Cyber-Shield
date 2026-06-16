@@ -22,7 +22,7 @@ export default function Scanner() {
     setResult(null);
 
     try {
-      const response = await fetch("/api/check-link", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/check-link`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content, language: currentLang }),
