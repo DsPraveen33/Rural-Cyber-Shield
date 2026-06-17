@@ -388,7 +388,7 @@ export default function Learning() {
             <p className="text-sm text-muted-foreground">{tr.tryDifferentSearch}</p>
           </div>
         ) : (
-          filteredTips?.map((tip) => (
+          (filteredTips || []).map((tip) => (
             <div
               key={tip.id}
               data-testid={`card-tip-${tip.id}`}

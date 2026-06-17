@@ -38,7 +38,7 @@ export default function ScamAlerts() {
           </div>
         )}
 
-        {alerts?.map((alert) => (
+        {(alerts || []).map((alert) => (
           <div key={alert.id} className="bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col md:flex-row">
             <div className={`w-full md:w-2 ${alert.severity === 'high' || alert.severity === 'critical' ? 'bg-red-500' : 'bg-amber-500'}`} />
             
