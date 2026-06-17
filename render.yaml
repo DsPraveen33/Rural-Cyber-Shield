@@ -3,7 +3,7 @@ services:
     name: rural-cyber-shield-api
     env: node
     buildCommand: pnpm install && pnpm --filter @workspace/api-server run build
-    startCommand: cd artifacts/api-server && npm run start
+    startCommand: cd artifacts/api-server && node --env-file-if-exists=.env ./dist/index.mjs
     envVars:
       - key: NODE_ENV
         value: "production"
