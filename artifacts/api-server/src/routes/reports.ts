@@ -6,21 +6,13 @@ import { desc } from "drizzle-orm";
 
 const router = Router();
 
+let mockReports: any[] = [];
+let nextId = 1;
+
 router.get("/reports", async (req, res) => {
   try {
-    const reports = await db
-      .select()
-      .from(reportsTable)
-      .orderBy(desc(reportsTable.createdAt))
-      .limit(10);
-      
-    // Format the date to match the OpenAPI schema expectations (ISO string)
-    const formattedReports = reports.map(r => ({
-      ...r,
-      createdAt: r.createdAt.toISOString()
-    }));
-
-    res.json(formattedReports);
+    const sorted = [...mockReports].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 10);
+    res.json(sorted);
   } catch (err) {
     req.log.error({ err }, "Failed to fetch reports");
     res.status(500).json({ error: "Failed to fetch reports" });
@@ -35,18 +27,17 @@ router.post("/reports", async (req, res) => {
   }
 
   try {
-    const [inserted] = await db
-      .insert(reportsTable)
-      .values({
-        scamType: parsed.data.scamType,
-        description: parsed.data.description,
-        district: parsed.data.district,
-        contactNumber: parsed.data.contactNumber || null,
-        severity: parsed.data.severity || "moderate",
-      })
-      .returning({ id: reportsTable.id });
-
-    res.json({ success: true, id: inserted.id });
+    const newReport = {
+      id: nextId++,
+      scamType: parsed.data.scamType,
+      description: parsed.data.description,
+      district: parsed.data.district,
+      contactNumber: parsed.data.contactNumber || null,
+      severity: parsed.data.severity || "moderate",
+      createdAt: new Date().toISOString()
+    };
+    mockReports.push(newReport);
+    res.json({ success: true, id: newReport.id });
   } catch (err) {
     req.log.error({ err }, "Failed to submit report");
     res.status(500).json({ error: "Failed to submit report" });

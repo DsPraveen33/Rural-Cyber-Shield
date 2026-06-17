@@ -9,24 +9,7 @@ if (Number.isNaN(port) || port <= 0) {
   throw new Error(`Invalid PORT value: "${rawPort}"`);
 }
 
-import { db } from "@workspace/db";
-import { sql } from "drizzle-orm";
-
-async function initDB() {
-  await db.execute(sql`
-    CREATE TABLE IF NOT EXISTS reports (
-      id SERIAL PRIMARY KEY,
-      scam_type VARCHAR(100) NOT NULL,
-      description TEXT NOT NULL,
-      district VARCHAR(100) NOT NULL,
-      contact_number VARCHAR(20),
-      severity VARCHAR(20) DEFAULT 'moderate' NOT NULL,
-      created_at TIMESTAMP DEFAULT NOW() NOT NULL
-    );
-  `);
-}
-
-initDB().then(() => {
+// Database removed due to Render 512MB memory limit for WASM.
   if (!process.env.VERCEL) {
     app.listen(port, (err) => {
       if (err) {
@@ -36,6 +19,5 @@ initDB().then(() => {
       logger.info({ port }, "Server listening");
     });
   }
-});
 
 export default app;
