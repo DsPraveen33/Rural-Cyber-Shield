@@ -47,21 +47,23 @@ export default function Home() {
     }
   };
 
-  const getAlertAccent = (severity: AlertSeverity) => {
-    switch (severity) {
+  const getAlertAccent = (severity: string) => {
+    switch (severity?.toLowerCase()) {
       case 'critical': return { border: 'border-red-300', bg: 'bg-red-50', bar: 'bg-red-500', badge: 'bg-red-500 text-white', dot: 'bg-red-500' };
       case 'high': return { border: 'border-orange-300', bg: 'bg-orange-50', bar: 'bg-orange-500', badge: 'bg-orange-500 text-white', dot: 'bg-orange-500' };
       case 'moderate': return { border: 'border-amber-300', bg: 'bg-amber-50', bar: 'bg-amber-500', badge: 'bg-amber-600 text-white', dot: 'bg-amber-500' };
       case 'monitor': return { border: 'border-blue-300', bg: 'bg-blue-50', bar: 'bg-blue-500', badge: 'bg-blue-500 text-white', dot: 'bg-blue-400' };
+      default: return { border: 'border-gray-300', bg: 'bg-gray-50', bar: 'bg-gray-500', badge: 'bg-gray-500 text-white', dot: 'bg-gray-400' };
     }
   };
 
-  const getSeverityLabel = (severity: AlertSeverity) => {
-    switch (severity) {
+  const getSeverityLabel = (severity: string) => {
+    switch (severity?.toLowerCase()) {
       case 'critical': return tr.communityAlertsSeverityCritical;
       case 'high': return tr.communityAlertsSeverityHigh;
       case 'moderate': return tr.communityAlertsSeverityModerate;
       case 'monitor': return tr.communityAlertsSeverityMonitor;
+      default: return "WARNING";
     }
   };
 
@@ -272,7 +274,7 @@ export default function Home() {
         </div>
 
         <div className="space-y-2.5">
-          {(!reportsData || reportsData.length === 0) ? communityAlerts.map((alert) => {
+          {(!Array.isArray(reportsData) || reportsData.length === 0) ? communityAlerts.map((alert) => {
             const accent = getAlertAccent(alert.severity);
             return (
               <div key={alert.id} className={`rounded-xl border ${accent.border} ${accent.bg} overflow-hidden flex`}>
