@@ -98,7 +98,7 @@ export default function CertificateGenerator({ userName: initialUserName, score,
               <div className="flex-1 flex flex-col items-center justify-center text-center relative z-10">
                 <p className="text-lg text-[#6b7280] font-medium mb-4 uppercase tracking-widest">This is proudly presented to</p>
                 
-                <h2 className="text-6xl text-[#d4af37] border-b-[2px] border-[#d4af37] pb-3 mb-6 px-16 inline-block font-bold drop-shadow-sm" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic" }}>
+                <h2 className="text-6xl text-[#d4af37] border-b-[2px] border-[#d4af37] pb-3 mb-6 px-16 inline-block font-bold" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic", textShadow: "1px 1px 2px rgba(0,0,0,0.2)" }}>
                   {participantName}
                 </h2>
                 
