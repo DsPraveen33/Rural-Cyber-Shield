@@ -26,7 +26,7 @@ app.use(
   }),
 );
 app.use(cors({
-  origin: ["http://localhost:5173", "https://dspraveen33.github.io"],
+  origin: true,
   credentials: true
 }));
 app.use(express.json());
