@@ -2,13 +2,12 @@ services:
   - type: web
     name: rural-cyber-shield-api
     env: node
-    plan: free
     buildCommand: pnpm install && pnpm --filter @workspace/api-server run build
     startCommand: cd artifacts/api-server && npm run start
     envVars:
       - key: NODE_ENV
-        value: production
+        value: "production"
       - key: PORT
-        value: 10000
+        value: "10000"
       - key: GEMINI_API_KEY
         sync: false
