@@ -10,7 +10,7 @@ services:
       - key: PORT
         value: "10000"
       - key: NODE_OPTIONS
-        value: "--max-old-space-size=400"
+        value: "--max-old-space-size=250"
       - key: NODE_VERSION
         value: "20"
       - key: GEMINI_API_KEY

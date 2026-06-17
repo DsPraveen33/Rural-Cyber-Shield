@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const client = new PGlite("memory://");
+export const client = new PGlite("./pglite-db-data");
 export const db = drizzle(client, { schema });
 
 export * from "./schema";
