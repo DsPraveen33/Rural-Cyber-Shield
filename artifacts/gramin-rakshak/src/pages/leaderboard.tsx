@@ -105,7 +105,7 @@ export default function Leaderboard() {
         </div>
         
         <div className="divide-y divide-slate-100">
-          {leaderboard.map((user, index) => (
+          {Array.isArray(leaderboard) && leaderboard.map((user, index) => (
             <div 
               key={user.id} 
               className={`p-4 flex items-center justify-between transition-colors ${

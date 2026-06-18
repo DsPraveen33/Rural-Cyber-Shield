@@ -456,9 +456,9 @@ export default function Mitra() {
               {linkResult.signals && linkResult.signals.length > 0 && (
                 <div className="space-y-2">
                   <p className="text-xs font-bold text-foreground uppercase tracking-wide">{tr.checkLinkSignals}</p>
-                  <ul className="space-y-1.5">
-                    {linkResult.signals.map((s, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-foreground">
+                  <ul className="space-y-1.5 mt-2">
+                    {Array.isArray(linkResult.signals) && linkResult.signals.map((s, i) => (
+                      <li key={i} className="flex items-start gap-1.5 text-slate-700 text-[11px]">
                         <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
                         {s}
                       </li>

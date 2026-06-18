@@ -137,7 +137,7 @@ export default function Scanner() {
                     <Info className="w-4 h-4" /> Warning Signals Detected:
                   </h4>
                   <ul className="space-y-1.5">
-                    {result.signals.map((signal, idx) => (
+                    {Array.isArray(result?.signals) && result.signals.map((signal, idx) => (
                       <li key={idx} className="flex items-start gap-2 text-sm text-slate-700">
                         <span className="text-red-500 mt-0.5">•</span> {signal}
                       </li>
