@@ -393,7 +393,7 @@ export default function Home() {
             Array.from({ length: 3 }).map((_, i) => (
               <Skeleton key={i} className="w-full h-24 rounded-xl" />
             ))
-          ) : (threats || []).slice(0, 3).map((threat) => (
+          ) : (Array.isArray(threats) ? threats : []).slice(0, 3).map((threat) => (
             <Card key={threat.id} className="overflow-hidden shadow-sm">
               <div className="flex border-l-4" style={{ borderColor: threat.severity === 'critical' ? 'hsl(var(--destructive))' : threat.severity === 'high' ? '#ba1a1a' : 'hsl(var(--secondary))' }}>
                 <CardContent className="p-4 w-full flex items-start gap-4">
