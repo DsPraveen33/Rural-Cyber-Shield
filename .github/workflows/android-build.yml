@@ -40,6 +40,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Generate Capacitor Assets
+        run: |
+          cd artifacts/gramin-rakshak
+          cp assets/icon.png assets/logo.png
+          pnpm exec capacitor-assets generate --android
+
       - name: Sync Capacitor
         run: |
           cd artifacts/gramin-rakshak
