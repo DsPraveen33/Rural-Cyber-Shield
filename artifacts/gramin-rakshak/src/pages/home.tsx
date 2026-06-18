@@ -314,7 +314,8 @@ export default function Home() {
           }) : reportsData.map((report) => {
             const accent = getAlertAccent(report.severity as any);
             const hoursAgo = Math.max(1, Math.floor((new Date().getTime() - new Date(report.createdAt).getTime()) / (1000 * 60 * 60)));
-            const icon = report.scamType.toLowerCase().includes("upi") ? "💸" : report.scamType.toLowerCase().includes("otp") ? "💬" : "⚠️";
+            const scamTypeLower = (report.scamType || "").toLowerCase();
+            const icon = scamTypeLower.includes("upi") ? "💸" : scamTypeLower.includes("otp") ? "💬" : "⚠️";
             
             return (
               <div key={report.id} className={`rounded-xl border ${accent.border} ${accent.bg} overflow-hidden flex`}>
